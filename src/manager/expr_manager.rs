@@ -13,8 +13,7 @@ impl<'a> ExprManager<'a> {
 
     pub fn new_expr(&mut self, a: &'a Num<'a>, b: &'a Num<'a>, op: Op) -> &Expr {
         let expr = Expr::new(a, b, op);
-        let out = &expr;
         self.expr.push(expr);
-        return out
+        return &self.expr[self.expr.len()-1]
     }
 }

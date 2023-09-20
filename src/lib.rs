@@ -11,16 +11,12 @@ pub fn add(left: usize, right: usize) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use crate::num_type::ChangeNum;
-    use crate::operation::{BasicOp, Num};
     use super::*;
 
     #[test]
     fn it_works() {
-        println!("{}", num_type::Variable::new("a", ChangeNum::Undefined));
-        let a = num_type::Variable::new("a", ChangeNum::Undefined);
-        let b = num_type::Variable::new("b", ChangeNum::Var(&a));
-        println!("{}", operation::Expr::new(&Num::Var(&a), &Num::Var(&b), BasicOp::Mul))
+        let mut glo: manager::GloManager<'static> = manager::GloManager::new(true, false);
+        println!("{:?}", calculus::get_ne_huge(&mut glo, "x").unwrap())
     }
 
 }
