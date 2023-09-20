@@ -1,6 +1,7 @@
 use super::traits::{Val, Prt};
+use fixed_num::FixedNum;
 
-pub mod num {
+pub mod fixed_num {
     #[derive(Debug, Copy, Clone)]
     pub enum FixedNum {
         Sign(SignNum),
@@ -28,17 +29,17 @@ pub mod num {
 #[derive(Debug)]
 pub struct Constant<'a> {
     name: &'a str,
-    number: num::FixedNum
+    number: FixedNum
 }
 
 impl<'a> Constant<'a> {
-    pub fn new(name: &'a str, number: num::FixedNum) -> Self {
+    pub fn new(name: &'a str, number: FixedNum) -> Self {
         Self { name, number }
     }
 }
 
 impl Val for Constant<'_> {
-    fn val(&self) -> num::FixedNum {
+    fn val(&self) -> FixedNum {
         self.number.clone()
     }
 }

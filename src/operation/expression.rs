@@ -1,4 +1,4 @@
-use super::num_type::{Constant, Variable, num::*};
+use super::num_type::{Constant, Variable, fixed_num::*};
 use super::traits::{Val, Prt};
 
 #[derive(Debug)]
@@ -12,6 +12,11 @@ pub enum BasicOp {
 }
 
 #[derive(Debug)]
+pub enum Op {
+    Basic(BasicOp)
+}
+
+#[derive(Debug)]
 pub enum Num<'a> {
     Var(&'a Variable<'a>),
     Cons(&'a Constant<'a>),
@@ -21,17 +26,15 @@ pub enum Num<'a> {
 
 #[derive(Debug)]
 pub struct Expr<'a> {
-    a: Box<Num<'a>>,
-    b: Box<Num<'a>>,
-    expr_type: BasicOp
+    a: &'a Num<'a>,
+    b: &'a Num<'a>,
+    expr_type: Op
 }
 
 impl<'a> Expr<'a> {
-    pub fn new(a: Num<'a>, b: Num<'a>, expr_type: BasicOp) -> Self {
+    pub fn new(a: &'a Num<'a>, b: &'a Num<'a>, expr_type: Op) -> Self {
         Self {
-            a: Box::new(a),
-            b: Box::new(b),
-            expr_type
+            a, b, expr_type
         }
     }
 }

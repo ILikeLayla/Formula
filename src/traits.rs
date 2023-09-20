@@ -1,4 +1,4 @@
-use super::num_type::{Constant, Variable, num::*};
+use super::num_type::{Constant, Variable, fixed_num::*};
 use super::operation::Expr;
 
 pub use prt::Prt;
@@ -11,9 +11,89 @@ mod prt {
         fn print(&self) -> String;
     }
 
+    impl Prt for u8 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
 
+    impl Prt for u16 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
 
+    impl Prt for u32 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
 
+    impl Prt for u64 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
+
+    impl Prt for u128 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
+
+    impl Prt for usize {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
+
+    impl Prt for i8 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
+
+    impl Prt for i16 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
+
+    impl Prt for i32 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
+
+    impl Prt for i64 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
+
+    impl Prt for i128 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
+
+    impl Prt for isize {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
+
+    impl Prt for f32 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
+
+    impl Prt for f64 {
+        fn print(&self) -> String {
+            format!("{:?}", self.val())
+        }
+    }
 }
 
 mod val {

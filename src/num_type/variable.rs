@@ -1,5 +1,5 @@
 use crate::traits::Prt;
-use super::{num, Expr, traits::Val};
+use super::{fixed_num::*, Expr, traits::Val};
 
 #[derive(Debug)]
 pub enum ChangeNum<'a> {
@@ -24,11 +24,11 @@ impl<'a> Variable<'a> {
 }
 
 impl Val for Variable<'_> {
-    fn val(&self) -> num::FixedNum {
+    fn val(&self) -> FixedNum {
         match &(*self.expr) {
             ChangeNum::Var(num) => num.val().clone(),
             ChangeNum::Expr(expr) => expr.val().clone(),
-            ChangeNum::Undefined => num::FixedNum::Undefined,
+            ChangeNum::Undefined => FixedNum::Undefined,
         }
     }
 }

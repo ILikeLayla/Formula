@@ -16,19 +16,23 @@ impl<'a> VarManager<'a> {
         }
     }
 
-    pub fn add_variable(&mut self, name: &'a str, expr: ChangeNum<'a>) -> Result<(), &str> {
+    pub fn add_variable(&mut self, name: &'a str, expr: ChangeNum<'a>) -> Result<&Variable, &str> {
         if self.name_used.insert(name) {
-            let _ = self.var_map.insert(name, Variable::new(name, expr));
-            Ok(())
+            let var = Variable::new(name, expr);
+            let out = &var;
+            let _ = self.var_map.insert(name, var);
+            Ok(out)
         } else {
             Err("Name is used.")
         }
     }
 
-    pub fn add_constant(&mut self, name: &'a str, number: num::FixedNum) -> Result<(), &str> {
+    pub fn add_constant(&mut self, name: &'a str, number: fixed_num::FixedNum) -> Result<&Constant, &str> {
         if self.name_used.insert(name) {
-            let _ = self.con_map.insert(name, Constant::new(name, number));
-            Ok(())
+            let con = Constant::new(name, number);
+            let out = &con;
+            let _ = self.con_map.insert(name, con);
+            Ok(out)
         } else {
             Err("Name is used.")
         }

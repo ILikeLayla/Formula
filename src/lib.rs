@@ -20,7 +20,7 @@ mod tests {
         println!("{}", num_type::Variable::new("a", ChangeNum::Undefined));
         let a = num_type::Variable::new("a", ChangeNum::Undefined);
         let b = num_type::Variable::new("b", ChangeNum::Var(&a));
-        println!("{}", operation::Expr::new(Num::Var(&a), Num::Var(&b), BasicOp::Mul))
+        println!("{}", operation::Expr::new(&Num::Var(&a), &Num::Var(&b), BasicOp::Mul))
     }
 
 }
