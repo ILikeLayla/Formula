@@ -1,3 +1,4 @@
+use std::rc::Rc;
 use crate::num_type::{Constant, Variable};
 use crate::operation::Expr;
 use super::{ExprManager, VarManager, calculus::CalManager, linear_algebra::AlManager};
@@ -21,7 +22,7 @@ impl<'a> GloManager<'a> {
         }
     }
 
-    pub fn add_constant(&'a mut self, name: &'static str, number: FixedNum) -> Result<&Constant<'a>, &str> {
+    pub fn add_constant(&'a mut self, name: &'static str, number: FixedNum) -> Result<Rc<Constant<'a>>, &str> {
         self.var.add_constant(name, number)
     }
 

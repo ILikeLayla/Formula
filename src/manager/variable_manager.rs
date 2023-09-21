@@ -1,4 +1,5 @@
 use std::collections::{HashMap, HashSet};
+use std::rc::Rc;
 use super::num_type::*;
 
 pub struct VarManager<'a> {
@@ -26,11 +27,11 @@ impl<'a> VarManager<'a> {
         }
     }
 
-    pub fn add_constant(&mut self, name: &'a str, number: fixed_num::FixedNum) -> Result<&Constant, &str> {
+    pub fn add_constant(&mut self, name: &'a str, number: fixed_num::FixedNum) -> Result<Rc<Constant>, &str> {
         if self.name_used.insert(name) {
             let con = Constant::new(name, number);
             let _ = self.con_map.insert(name, con);
-            Ok(self.con_map.get(name).unwrap())
+            Ok(Rc::new(self.con_map.get(name).unwrap()))
         } else {
             Err("Name is used.")
         }
