@@ -1,9 +1,6 @@
-use std::rc::Rc;
-use crate::num_type::{Constant, Variable};
-use crate::operation::Expr;
 use super::{ExprManager, VarManager, calculus::CalManager, linear_algebra::AlManager};
-use super::num_type::{fixed_num::FixedNum, ChangeNum};
-use super::operation::{Num, Op};
+use super::num_type::{fixed_num::FixedNum, ChangeNum, Constant, Variable};
+use super::operation::{Num, Op, Expr};
 
 pub struct GloManager<'a> {
     expr: ExprManager<'a>,
@@ -13,24 +10,29 @@ pub struct GloManager<'a> {
 }
 
 impl<'a> GloManager<'a> {
-    pub fn new(cal: bool, alg: bool) -> Self {
+    pub fn new(var: VarManager<'a>, expr: ExprManager<'a>, cal: Option<CalManager>, alg: Option<AlManager>) -> Self {
         Self {
-            expr: ExprManager::new(),
-            var: VarManager::new(),
-            cal: if cal {Some(CalManager::new())} else {None},
-            alg: if alg {Some(AlManager::new())} else {None}
+            var, expr, cal, alg
         }
     }
 
-    pub fn add_constant(&'a mut self, name: &'static str, number: FixedNum) -> Result<(), &str> {
+    pub fn add_constant(&mut self, name: &'a str, number: FixedNum) -> Result<(), &str> {
         self.var.add_constant(name, number)
     }
 
-    pub fn add_variable(&'a mut self, name: &'static str, expr: ChangeNum<'a>) -> Result<(), &str> {
+    pub fn add_variable(&mut self, name: &'a str, expr: ChangeNum<'a>) -> Result<(), &str> {
         self.var.add_variable(name, expr)
     }
 
     pub fn add_expr(&mut self, a: &'a Num<'a>, b: &'a Num<'a>, expr_type: Op) -> &Expr {
         self.expr.new_expr(a, b, expr_type)
+    }
+
+    pub fn get_var(&self, name: &'a str) -> Option<&Variable> {
+        self.var.get_var(name)
+    }
+
+    pub fn get_cons(&self, name: &'a str) -> Option<&Constant> {
+        self.var.get_cons(name)
     }
 }

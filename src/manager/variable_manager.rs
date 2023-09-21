@@ -37,6 +37,14 @@ impl<'a> VarManager<'a> {
         }
     }
 
+    pub fn get_var(&self, name: &'a str) -> Option<&Variable<'a>> {
+        self.var_map.get(name)
+    }
+
+    pub fn get_cons(&self, name: &'a str) -> Option<&Constant<'a>> {
+        self.con_map.get(name)
+    }
+
     pub fn used_name(&self) -> Vec<&str> {
         self.used_name().clone()
     }
