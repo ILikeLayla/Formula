@@ -32,12 +32,12 @@ use super::{STEP, num_type::{fixed_num, Constant}, GloManager};
 //     )
 // }
 
-pub fn get_ne_huge<'a>(glo_manager:Rc<RefCell<GloManager<'a>>>, name:&'a str) -> Result<&'static Constant<'a>, &'a str> {
-    glo_manager.borrow_mut().add_constant(name,
-        fixed_num::FixedNum::Sign(
-            fixed_num::SignNum::I128(
-                -1_i128 * 10_i128.pow(STEP.into())
-            )
-        ) 
-    )
-}
+// pub fn get_ne_huge<'a>(glo_manager:Rc<RefCell<GloManager<'a>>>, name:&'a str) -> Result<&'static Constant<'a>, &'a str> {
+//     glo_manager.borrow_mut().add_constant(name,
+//         fixed_num::FixedNum::Sign(
+//             fixed_num::SignNum::I128(
+//                 -1_i128 * 10_i128.pow(STEP.into())
+//             )
+//         )
+//     )
+// }

@@ -14,12 +14,12 @@ mod tests {
     use super::*;
     use std::rc::Rc;
     use std::cell::RefCell;
+    use crate::num_type::fixed_num::FixedNum;
 
     #[test]
     fn it_works() {
         let mut glo: manager::GloManager<'static> = manager::GloManager::new(true, false);
-        let glo_borrow = Rc::new(RefCell::new(glo));
-        println!("{:?}", calculus::get_ne_huge(glo_borrow.clone(), "x").unwrap())
+        let a = glo.add_constant("a", FixedNum::Undefined).expect("TODO");
     }
 
 }

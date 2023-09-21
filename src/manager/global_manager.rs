@@ -22,11 +22,11 @@ impl<'a> GloManager<'a> {
         }
     }
 
-    pub fn add_constant(&'a mut self, name: &'static str, number: FixedNum) -> Result<Rc<Constant<'a>>, &str> {
+    pub fn add_constant(&'a mut self, name: &'static str, number: FixedNum) -> Result<(), &str> {
         self.var.add_constant(name, number)
     }
 
-    pub fn add_variable(&'a mut self, name: &'static str, expr: ChangeNum<'a>) -> Result<&Variable<'a>, &str> {
+    pub fn add_variable(&'a mut self, name: &'static str, expr: ChangeNum<'a>) -> Result<(), &str> {
         self.var.add_variable(name, expr)
     }
 
