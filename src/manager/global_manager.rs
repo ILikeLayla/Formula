@@ -2,6 +2,12 @@ use super::{ExprManager, VarManager, calculus::CalManager, linear_algebra::AlMan
 use super::num_type::{fixed_num::FixedNum, ChangeNum, Constant, Variable};
 use super::operation::{Num, Op, Expr};
 
+#[derive(Debug)]
+pub enum SearchOut<'a> {
+    Cons(&'a Constant<'a>),
+    Var(&'a Variable<'a>),
+}
+
 pub struct GloManager<'a> {
     expr: ExprManager<'a>,
     var: VarManager<'a>,
@@ -34,5 +40,15 @@ impl<'a> GloManager<'a> {
 
     pub fn get_cons(&self, name: &'a str) -> Option<&Constant> {
         self.var.get_cons(name)
+    }
+
+    pub fn get(&self, name: &'a str) -> Option<SearchOut> {
+        if let Some(cons) = self.var.get_cons(name) {
+            Some(SearchOut::Cons(cons))
+        } else if let Some(var) = self.var.get_var(name) {
+            Some(SearchOut::Var(var))
+        } else {
+            None
+        }
     }
 }
