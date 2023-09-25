@@ -26,13 +26,13 @@ pub enum Num<'a> {
 
 #[derive(Debug)]
 pub struct Expr<'a> {
-    a: &'a Num<'a>,
-    b: &'a Num<'a>,
+    a: Num<'a>,
+    b: Num<'a>,
     expr_type: Op
 }
 
 impl<'a> Expr<'a> {
-    pub fn new(a: &'a Num<'a>, b: &'a Num<'a>, expr_type: Op) -> Self {
+    pub fn new(a: Num<'a>, b: Num<'a>, expr_type: Op) -> Self {
         Self {
             a, b, expr_type
         }
@@ -47,7 +47,7 @@ impl Val for Expr<'_> {
 
 impl Prt for Expr<'_> {
     fn print(&self) -> String {
-        format!("Expr< a:{:?}, b:{:?}, operation:{:?} >", *self.a, *self.b, self.expr_type)
+        format!("Expr< a:{:?}, b:{:?}, operation:{:?} >", self.a, self.b, self.expr_type)
     }
 }
 

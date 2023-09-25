@@ -1,10 +1,10 @@
 use crate::traits::Prt;
-use super::{fixed_num::*, Expr, traits::Val};
+use super::{fixed_num::*, Expr, traits::Val, Op, BasicOp, Num, Constant};
 
 #[derive(Debug)]
 pub enum ChangeNum<'a> {
     Var(&'a Variable<'a>),
-    Expr(&'a Expr<'a>),
+    Expr(Expr<'a>),
     Undefined,
 }
 
