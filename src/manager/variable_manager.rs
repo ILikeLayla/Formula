@@ -45,7 +45,7 @@ impl<'a> VarManager<'a> {
         self.con_map.get(name)
     }
 
-    pub fn used_name(&self) -> Vec<&str> {
-        self.used_name().clone()
-    }
+    // pub fn used_name(&self) -> Vec<&str> {
+    //     self.used_name().clone()
+    // }
 }

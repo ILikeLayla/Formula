@@ -18,9 +18,9 @@ pub enum Op {
 
 #[derive(Debug)]
 pub enum Num<'a> {
-    Var(&'a Variable<'a>),
-    Cons(&'a Constant<'a>),
-    Expr(&'a Expr<'a>),
+    Var(&'a str),
+    Cons(&'a str),
+    Expr(&'a str),
     Fixed(FixedNum),
 }
 
