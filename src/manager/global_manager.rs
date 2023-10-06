@@ -11,7 +11,7 @@ pub struct GloManager<'a> {
     alg: Option<AlManager>
 }
 
-impl<'a> GloManager<'a> {
+impl<'a: 'static> GloManager<'a> {
     pub fn new(var: VarManager<'a>, event: Eva, cal: Option<CalManager>, alg: Option<AlManager>) -> Self {
         Self {
             var, cal, alg, event
