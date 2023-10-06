@@ -5,3 +5,4 @@ pub use event_manager::*;
 pub use cal_event::*;
 
 use super::operation::*;
+use super::num_type::*;

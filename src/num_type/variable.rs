@@ -1,23 +1,24 @@
 use crate::traits::Prt;
 use super::{fixed_num::*, Expr, traits::Val, Op, BasicOp, Num, Constant};
+use std::cell::RefCell;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub enum ChangeNum<'a> {
-    Var(&'a str),
-    Expr(&'a str),
+    Var(&'a Variable<'a>),
+    Expr(&'a Expr<'a>),
     Undefined,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Variable<'a> {
     name: &'a str,
-    expr: ChangeNum<'a>
+    expr: RefCell<ChangeNum<'a>>
 }
 
 impl<'a> Variable<'a> {
     pub fn new(name:&'a str, expr: ChangeNum<'a>) -> Self {
         Self {
-            expr,
+            expr: RefCell::new(expr),
             name
         }
     }

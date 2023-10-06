@@ -1,8 +1,10 @@
 mod variable;
 mod constant;
+mod num;
 
 pub use variable::*;
 pub use constant::*;
+pub use num::*;
 
-use super::operation::{Op, Expr, BasicOp, Num};
+use super::operation::{Op, Expr, BasicOp};
 use super::traits;
