@@ -18,7 +18,7 @@ impl<'a: 'static> GloManager<'a> {
         }
     }
 
-    pub fn add_constant(&'a mut self, name: &'a str, number: fixed_num::FixedNum) -> Result<Num, &str> {
+    pub fn add_constant(&mut self, name: &'a str, number: fixed_num::FixedNum) -> Result<Num, &str> {
         self.var.add_constant(name, number)
     }
 
@@ -34,7 +34,7 @@ impl<'a: 'static> GloManager<'a> {
         self.var.get_cons(name)
     }
 
-    pub fn add_tiny(&'a mut self, name:&'a str, positive: bool) -> Result<Num, &str> {
+    pub fn add_tiny(&mut self, name:&'a str, positive: bool) -> Result<Num, &str> {
         let pos:f64 = if positive {1.0} else {-1.0};
         let num = fixed_num::FixedNum::Float(fixed_num::Float::F64(pos * (0.1_f64).powi(config::STEP.into())));
         self.add_constant(name, num)

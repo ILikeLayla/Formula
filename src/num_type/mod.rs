@@ -8,4 +8,3 @@ pub use num::*;
 
 use super::operation::{Op, Expr, BasicOp};
 use super::traits;
-use super::EXPR_LIST;

@@ -34,20 +34,20 @@ impl<'a> Expr<'a> {
         }
     }
 
-    pub fn add(&'a self, rhs: Num<'a>) -> Self {
-        Expr::new(Num::Expr(self), rhs, Op::Basic(BasicOp::Add))
+    pub fn add(&self, rhs: Num<'a>) -> Self {
+        Expr::new(Num::Expr(Box::new(self.clone())), rhs, Op::Basic(BasicOp::Add))
     }
 
-    pub fn sub(&'a self, rhs: Num<'a>) -> Self {
-        Expr::new(Num::Expr(self), rhs, Op::Basic(BasicOp::Sub))
+    pub fn sub(&self, rhs: Num<'a>) -> Self {
+        Expr::new(Num::Expr(Box::new(self.clone())), rhs, Op::Basic(BasicOp::Sub))
     }
 
-    pub fn mul(&'a self, rhs: Num<'a>) -> Self {
-        Expr::new(Num::Expr(self), rhs, Op::Basic(BasicOp::Mul))
+    pub fn mul(&self, rhs: Num<'a>) -> Self {
+        Expr::new(Num::Expr(Box::new(self.clone())), rhs, Op::Basic(BasicOp::Mul))
     }
     
-    pub fn div(&'a self, rhs: Num<'a>) -> Self {
-        Expr::new(Num::Expr(self), rhs, Op::Basic(BasicOp::Div))
+    pub fn div(&self, rhs: Num<'a>) -> Self {
+        Expr::new(Num::Expr(Box::new(self.clone())), rhs, Op::Basic(BasicOp::Div))
     }
 }
 
@@ -72,27 +72,27 @@ impl std::fmt::Display for Expr<'_> {
 impl<'a> std::ops::Add for &'a Expr<'a> {
     type Output = Expr<'a>;
     fn add(self, rhs: Self) -> Self::Output {
-        self.add(Num::Expr(rhs))
+        self.add(Num::Expr(Box::new(rhs.clone())))
     }
 }
 
 impl<'a> std::ops::Sub for &'a Expr<'a> {
     type Output = Expr<'a>;
     fn sub(self, rhs: Self) -> Self::Output {
-        self.sub(Num::Expr(rhs))
+        self.sub(Num::Expr(Box::new(rhs.clone())))
     }
 }
 
 impl<'a> std::ops::Mul for &'a Expr<'a> {
     type Output = Expr<'a>;
     fn mul(self, rhs: Self) -> Self::Output {
-        self.mul(Num::Expr(rhs))
+        self.mul(Num::Expr(Box::new(rhs.clone())))
     }
 }
 
 impl<'a> std::ops::Div for &'a Expr<'a> {
     type Output = Expr<'a>;
     fn div(self, rhs: Self) -> Self::Output {
-        self.div(Num::Expr(rhs))
+        self.div(Num::Expr(Box::new(rhs.clone())))
     }
 }

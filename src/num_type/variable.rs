@@ -46,3 +46,10 @@ impl<'a> std::fmt::Display for Variable<'a> {
         write!(f, "{}", self.print())
     }
 }
+
+// impl<'a> std::ops::Add for &Variable<'a> {
+//     type Output = Num<'a>;
+//     fn add(self, rhs: Self) -> Self::Output {
+//         Num::Expr(())
+//     }
+// }
