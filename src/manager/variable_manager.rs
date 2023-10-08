@@ -22,42 +22,42 @@ impl VarManager<'_> {
     }
 }
 
-impl<'a> VarManager<'a> {
-    pub fn add_variable(&'a mut self, name: &'a str, expr: ChangeNum<'a>) -> Result<Num, &str> {
-        if self.name_used.insert(name) {
-            let var = Variable::new(name, expr);
-            self.var_vec.push(var);
-            let _ = self.var_map.insert(name, self.var_vec.last().unwrap());
-            Ok(self.get_var(name).unwrap())
-        } else {
-            Err("Name is used.")
-        }
-    }
+// impl<'a> VarManager<'a> {
+//     pub fn add_variable(&'a mut self, name: &'a str, expr: ChangeNum<'a>) -> Result<Num, &str> {
+//         if self.name_used.insert(name) {
+//             let var = Variable::new(name, expr);
+//             self.var_vec.push(var);
+//             let _ = self.var_map.insert(name, self.var_vec.last().unwrap());
+//             Ok(self.get_var(name).unwrap())
+//         } else {
+//             Err("Name is used.")
+//         }
+//     }
 
-    pub fn add_constant(&mut self, name: &'a str, number: fixed_num::FixedNum) -> Result<Num, &str> {
-        if self.name_used.insert(name) {
-            let con = Constant::new(name, number);
-            self.con_vec.push(con);
-            let _ = self.con_map.insert(name, self.con_vec.last().unwrap());
-            Ok(self.get_cons(name).unwrap())
-        } else {
-            Err("Name is used.")
-        }
-    }
+//     pub fn add_constant(&mut self, name: &'a str, number: fixed_num::FixedNum) -> Result<Num, &str> {
+//         if self.name_used.insert(name) {
+//             let con = Constant::new(name, number);
+//             self.con_vec.push(con);
+//             let _ = self.con_map.insert(name, self.con_vec.last().unwrap());
+//             Ok(self.get_cons(name).unwrap())
+//         } else {
+//             Err("Name is used.")
+//         }
+//     }
 
-    pub fn get_cons(&self, name: &str) -> Option<Num> {
-        if let Some(cons) = self.con_map.get(name) {
-            Some(Num::Cons(*cons))
-        } else {
-            None
-        }
-    }
+//     pub fn get_cons(&self, name: &str) -> Option<Num> {
+//         if let Some(cons) = self.con_map.get(name) {
+//             Some(Num::Cons(*cons))
+//         } else {
+//             None
+//         }
+//     }
 
-    pub fn get_var(&'a self, name: &'a str) -> Option<Num> {
-        if let Some(var) = self.var_map.get(name) {
-            Some(Num::Var(*var))
-        } else {
-            None
-        }
-    }
-}
+//     pub fn get_var(&'a self, name: &'a str) -> Option<Num> {
+//         if let Some(var) = self.var_map.get(name) {
+//             Some(Num::Var(*var))
+//         } else {
+//             None
+//         }
+//     }
+// }
