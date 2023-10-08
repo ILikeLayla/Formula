@@ -1,3 +1,5 @@
+use crate::var_list::get_var_by_name;
+
 use super::{fixed_num::*, Expr, traits::{Prt, Val}, Op, BasicOp, Num, Constant, name_insert, delete_name, push_var, Name};
 use std::cell::RefCell;
 
@@ -14,8 +16,8 @@ pub struct Variable<'a> {
     num: Num<'a>
 }
 
-impl<'a> Variable<'a> {
-    pub fn new(name:&'a str, num: Num<'a>) -> Result<Self, &'a str> {
+impl<'a: 'static> Variable<'a> {
+    pub fn new(name:&'a str, num: Num<'a>) -> Result<Num<'a>, &'a str> {
         if let Err(msg) = name_insert(name) {
             Err(msg)
         } else {
@@ -26,7 +28,7 @@ impl<'a> Variable<'a> {
                 _ => return Err("The type in unacceptable.")
             };
             push_var(Self { name: Name::Str(name), num });
-            Ok(Num::Var(()))
+            Ok(get_var_by_name(name).unwrap())
         }
     }
 
@@ -45,6 +47,10 @@ impl Variable<'_> {
             _ => ()
         }
     }
+
+    pub fn name(&self) -> Name {
+        self.name.clone()
+    }
 }
 
 // impl Val for Variable<'_> {
@@ -60,7 +66,7 @@ impl Variable<'_> {
 impl Prt for Variable<'_> {
     fn print(&self) -> String {
         // format!("Variable< name:{}, expr:{:?} >", self.name, self.val())
-        format!("Variable< name:{} >", self.name )
+        format!("Variable< name:{:?} >", self.name )
     }
 }
 

@@ -49,6 +49,6 @@ impl std::ops::Add for Num<'_> {
     type Output = Self;
     fn add(self, rhs: Self) -> Self::Output {
         let expr = Expr::new(self, rhs, Op::Basic(BasicOp::Add));
-        Num::Expr(Box::new(expr))
+        expr
     }
 }

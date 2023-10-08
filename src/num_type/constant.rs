@@ -34,7 +34,7 @@ impl Constant<'_> {
     }
 
     pub fn name(&self) -> Name {
-        self.name
+        self.name.clone()
     }
 
     pub fn new_place_holder() -> Self {
