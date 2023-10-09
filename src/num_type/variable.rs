@@ -1,6 +1,4 @@
-use crate::var_list::get_var_by_name;
-
-use super::{fixed_num::*, Expr, traits::{Prt, Val}, Op, BasicOp, Num, Constant, name_insert, delete_name, push_var, Name};
+use super::{traits::{Prt, Val}, Num, Name, name, glo_var, warn};
 use std::cell::RefCell;
 
 // #[derive(Debug, Clone, Copy)]
@@ -18,17 +16,17 @@ pub struct Variable<'a> {
 
 impl<'a: 'static> Variable<'a> {
     pub fn new(name:&'a str, num: Num<'a>) -> Result<Num<'a>, &'a str> {
-        if let Err(msg) = name_insert(name) {
+        if let Err(msg) = name::name_insert(name) {
             Err(msg)
         } else {
             let num = match num {
                 Num::Expr(expr) => Num::Expr(expr),
                 Num::Var(var) => Num::Var(var),
                 Num::Undefined => Num::Undefined,
-                _ => return Err("The type in unacceptable.")
+                _ => {warn::unacc_type(); return Err("The type in unacceptable.")}
             };
-            push_var(Self { name: Name::Str(name), num });
-            Ok(get_var_by_name(name).unwrap())
+            glo_var::insert(name, Self { name: Name::Str(name), num });
+            Ok(glo_var::get(name).unwrap())
         }
     }
 
@@ -43,7 +41,7 @@ impl<'a: 'static> Variable<'a> {
 impl Variable<'_> {
     pub fn drop_name(&self) {
         match self.name {
-            Name::Str(name) => delete_name(name),
+            Name::Str(name) => name::delete_name(name),
             _ => ()
         }
     }
@@ -75,10 +73,3 @@ impl<'a> std::fmt::Display for Variable<'a> {
         write!(f, "{}", self.print())
     }
 }
-
-// impl<'a> std::ops::Add for &Variable<'a> {
-//     type Output = Num<'a>;
-//     fn add(self, rhs: Self) -> Self::Output {
-//         Num::Expr(())
-//     }
-// }

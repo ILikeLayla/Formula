@@ -8,9 +8,9 @@ pub use num::*;
 
 use super::operation::{Op, Expr, BasicOp};
 use super::traits;
-use super::name::*;
-use super::con_list::*;
-use super::var_list::*;
+use super::static_modifier::{name, glo_cons, glo_var};
+use super::config::*;
+use super::warn;
 
 #[derive(Debug, Clone)]
 pub enum Name<'a> {

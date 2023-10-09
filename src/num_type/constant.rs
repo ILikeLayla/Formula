@@ -1,5 +1,5 @@
 use super::traits::{Val, Prt};
-use super::{Num, name_insert, fixed_num, delete_name, Name};
+use super::{Num, name, glo_cons, fixed_num, Name, warn};
 
 #[derive(Debug)]
 pub struct Constant<'a> {
@@ -9,14 +9,14 @@ pub struct Constant<'a> {
 
 impl<'a> Constant<'a> {
     pub fn new(name: &'a str, num: Num<'a>) -> Result<Self, &'a str> {
-        if let Err(msg) = name_insert(name) {
+        if let Err(msg) = name::name_insert(name) {
             Err(msg)
         } else {
             let num = match num {
                 Num::Expr(expr) => Num::Expr(expr),
                 Num::Var(var) => Num::Var(var),
                 Num::Undefined => Num::Undefined,
-                _ => return Err("The type in unacceptable.")
+                _ => {warn::unacc_type(); return Err("The type in unacceptable.")}
             };
             Ok(Self {
                 name: Name::Str(name), num
@@ -28,7 +28,7 @@ impl<'a> Constant<'a> {
 impl Constant<'_> {
     pub fn drop_name(&self) {
         match self.name {
-            Name::Str(name) => delete_name(name),
+            Name::Str(name) => name::delete_name(name),
             _ => ()
         }
     }
