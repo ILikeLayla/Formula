@@ -1,3 +1,5 @@
+use crate::num_type::fixed_num::FixedNum;
+
 use super::num_type::Num;
 use super::traits::{Val, Prt};
 use super::op::*;
@@ -19,29 +21,19 @@ impl<'a> Expr<'a> {
             a, b, expr_type
         }))
     }
-
-    // pub fn add(&self, rhs: Num<'a>) -> Num<'a>{
-    //     Expr::new(Num::Expr(Box::new(self.clone())), rhs, Op::Basic(BasicOp::Add))
-    // }
-
-    // pub fn sub(&self, rhs: Num<'a>) -> Num<'a> {
-    //     Expr::new(Num::Expr(Box::new(self.clone())), rhs, Op::Basic(BasicOp::Sub))
-    // }
-
-    // pub fn mul(&self, rhs: Num<'a>) -> Num<'a> {
-    //     Expr::new(Num::Expr(Box::new(self.clone())), rhs, Op::Basic(BasicOp::Mul))
-    // }
-    
-    // pub fn div(&self, rhs: Num<'a>) -> Num<'a> {
-    //     Expr::new(Num::Expr(Box::new(self.clone())), rhs, Op::Basic(BasicOp::Div))
-    // }
 }
 
-// impl Val for Expr<'_> {
-//     fn val(&self) -> FixedNum {
-//         FixedNum::Undefined
-//     }
-// }
+impl Expr<'_> {
+    fn cal(&self) -> FixedNum {
+        let a = self.a.cal();
+        let b = self.b.cal();
+        match ( a, b ) {
+            (FixedNum::Float(a), FixedNum::Float(b)) => {
+                
+            } 
+        }
+    }
+}
 
 impl Prt for Expr<'_> {
     fn print(&self) -> String {

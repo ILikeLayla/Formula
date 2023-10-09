@@ -7,20 +7,19 @@ pub struct Constant<'a> {
     num: Num<'a>
 }
 
-impl<'a> Constant<'a> {
-    pub fn new(name: &'a str, num: Num<'a>) -> Result<Self, &'a str> {
+impl<'a: 'static> Constant<'a> {
+    pub fn new(name: &'a str, num: Num<'a>) -> Result<Num<'a>, &'a str> {
         if let Err(msg) = name::name_insert(name) {
             Err(msg)
         } else {
             let num = match num {
-                Num::Expr(expr) => Num::Expr(expr),
-                Num::Var(var) => Num::Var(var),
+                Num::Fixed(fix) => Num::Fixed(fix),
+                Num::Cons(cons) => Num::Cons(cons),
                 Num::Undefined => Num::Undefined,
-                _ => {warn::unacc_type(); return Err("The type in unacceptable.")}
+                _ => {warn::unacc_type(); return Err("T-1")}
             };
-            Ok(Self {
-                name: Name::Str(name), num
-            })
+            glo_cons::insert(name, Self { name: Name::Str(name), num });
+            Ok(glo_cons::get(name).unwrap())
         }
     }
 }
@@ -35,6 +34,10 @@ impl Constant<'_> {
 
     pub fn name(&self) -> Name {
         self.name.clone()
+    }
+
+    pub fn cal(&self) -> fixed_num::FixedNum {
+        self.num.cal()
     }
 
     pub fn new_place_holder() -> Self {

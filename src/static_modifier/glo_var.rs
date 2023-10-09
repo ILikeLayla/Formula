@@ -41,21 +41,20 @@ pub fn get(k: &str) -> Option<Num> {
     }
 }
 
-// pub fn push_var(var: Variable<'static>) {
-//     unsafe {
-//         GLO_VAR_LIST.push(var)
-//     }
-// }
-
-// pub fn get_var_by_name(aim:&str) -> Option<Num<'static>> {
-//     for i in unsafe {
-//         GLO_VAR_LIST.iter()
-//     } {
-//         if let Name::Str(name) = i.name() {
-//             if name == aim {
-//                 return Some(Num::Var(i))
-//             }
-//         }
-//     };
-//     return None;
-// }
+pub fn remove(k: &str) -> Result<(), &str> {
+    match unsafe {
+        GLO_VAR_MAP.as_mut()
+    } {
+        Some(map) => {
+            if map.contains_key(&k) {
+                map.remove(k);
+                Ok(())
+            } else {
+                Err("SN-2")
+            }
+        },
+        None => {
+            Err("SM-1")
+        }
+    }
+}

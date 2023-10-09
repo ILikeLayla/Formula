@@ -41,21 +41,20 @@ pub fn get(k: &str) -> Option<Num> {
     }
 }
 
-// pub fn push_cons(cons: Constant<'static>) {
-//     unsafe {
-//         GLO_CONS_LIST.push(cons)
-//     }
-// }
-
-// pub fn get_cons_by_name(aim: &str) -> Option<Num<'static>> {
-//     for i in unsafe {
-//         GLO_CONS_LIST.iter()
-//     } {
-//         if let Name::Str(name) = i.name() {
-//             if name == aim {
-//                 return Some(Num::Cons(i))
-//             }
-//         }
-//     };
-//     return None
-// }
+pub fn remove(k: &str) -> Result<(), &str> {
+    match unsafe {
+        GLO_CONS_MAP.as_mut()
+    } {
+        Some(map) => {
+            if map.contains_key(&k) {
+                map.remove(k);
+                Ok(())
+            } else {
+                Err("SN-2")
+            }
+        },
+        None => {
+            Err("SM-1")
+        }
+    }
+}

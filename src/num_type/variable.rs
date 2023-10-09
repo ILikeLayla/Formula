@@ -1,4 +1,4 @@
-use super::{traits::{Prt, Val}, Num, Name, name, glo_var, warn};
+use super::{traits::{Prt, Val}, Num, Name, name, glo_var, warn, fixed_num};
 use std::cell::RefCell;
 
 // #[derive(Debug, Clone, Copy)]
@@ -23,7 +23,7 @@ impl<'a: 'static> Variable<'a> {
                 Num::Expr(expr) => Num::Expr(expr),
                 Num::Var(var) => Num::Var(var),
                 Num::Undefined => Num::Undefined,
-                _ => {warn::unacc_type(); return Err("The type in unacceptable.")}
+                _ => {warn::unacc_type(); return Err("T-1")}
             };
             glo_var::insert(name, Self { name: Name::Str(name), num });
             Ok(glo_var::get(name).unwrap())
@@ -35,6 +35,10 @@ impl<'a: 'static> Variable<'a> {
             name: Name::PlaceHolder,
             num: Num::Undefined,
         }
+    }
+
+    pub fn change_num(&mut self, num: Num<'a>) {
+        self.num = num
     }
 }
 
@@ -48,6 +52,10 @@ impl Variable<'_> {
 
     pub fn name(&self) -> Name {
         self.name.clone()
+    }
+
+    pub fn cal(&self) -> fixed_num::FixedNum {
+        self.num.cal()
     }
 }
 

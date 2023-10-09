@@ -26,7 +26,10 @@ pub fn insert(k: &'static str, v: usize) -> Option<usize> {
 pub fn get(k: &str) -> Option<&usize> {
     unsafe {
         if let Some(map) = &COUNT {
-            map.get(k)
+            match map.get(k) {
+                Some(num) => Some(num),
+                None => {warn::name_not_used(); None}
+            }
         } else {
             warn::had_not_init();
             None
@@ -37,7 +40,10 @@ pub fn get(k: &str) -> Option<&usize> {
 fn get_mut(k: &str) -> Option<&mut usize> {
     unsafe {
         if let Some(map) = COUNT.as_mut() {
-            return map.get_mut(k)
+            match map.get_mut(k) {
+                Some(num) => Some(num),
+                None => {warn::name_not_used(); None}
+            }
         } else {
             warn::had_not_init();
             None
@@ -53,7 +59,7 @@ pub fn add(k: &str, num: usize, add: bool) {
             *val -= num
         }
     } else {
-        warn::name_not_used();
+        ()
     }
 }
 
@@ -63,4 +69,24 @@ pub fn add_one(k: &str) {
 
 pub fn sub_one(k: &str) {
     add(k, 1, false)
+}
+
+pub fn remove(k: &str) -> Result<(), &str> {
+    match get(k) {
+        Some(num) => {
+            if num == &0 {
+                unsafe {
+                    if let Some(map) = COUNT.as_mut() {
+                        map.remove(k); Ok(())
+                    } else {
+                        Err("SM-1")
+                    }
+                }
+            } else {
+                warn::delete_before_no_borrow();
+                Err("SC-1")
+            }
+        },
+        None => Err("SM-1/ SN-2")
+    }
 }

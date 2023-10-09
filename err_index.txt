@@ -1,0 +1,9 @@
+static - S
+SM-1    the map had not been initiallized.
+SM-2    the map had already been initiallized.
+SN-1    the name is used.
+SN-2    the name is not used.
+SC-1    delete before the borrowings are dropped.
+
+type - T
+T-1     the type is unacceptable.

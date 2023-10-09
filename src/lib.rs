@@ -8,20 +8,39 @@ pub mod static_modifier;
 pub mod warn;
 
 use num_type::{Variable, Constant};
+use static_modifier::{count, glo_cons, glo_var};
 use std::collections::HashMap;
 use config::*;
 
+pub fn init() {
+    count::init();
+    glo_cons::init();
+    glo_var::init();
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::{num_type::Variable, NAME, static_modifier::*, COUNT};
+    use crate::{num_type::{Variable, Constant}, NAME, static_modifier::*, COUNT, init};
 
     #[test]
     fn test() {
-        count::init();
-        count::init();
-        count::insert("a", 0);
-        // println!("{:?}", COUNT);
-        unsafe { println!("{:?}", COUNT) };
+        init();
+        let e = Constant::new("e", 
+            crate::num_type::Num::Fixed(
+                crate::num_type::fixed_num::FixedNum::Float(
+                    crate::num_type::fixed_num::Float::F64(2.71828)
+                )
+            )
+        ).unwrap();
+        let pi = Constant::new("pi", 
+            crate::num_type::Num::Fixed(
+                crate::num_type::fixed_num::FixedNum::Float(
+                    crate::num_type::fixed_num::Float::F64(3.1415926)
+                )
+            )
+        ).unwrap();
+        let mut a = Variable::new("a", e.clone() + pi.clone()).unwrap();
+        println!("{:?}", a)
     }
 }
 
