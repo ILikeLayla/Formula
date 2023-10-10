@@ -40,7 +40,7 @@ mod tests {
             )
         ).unwrap();
         let mut a = Variable::new("a", e.clone() + pi.clone()).unwrap();
-        println!("{:?}", a)
+        println!("{:?}", a.cal())
     }
 }
 

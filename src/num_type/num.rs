@@ -156,6 +156,356 @@ pub mod fixed_num {
                 (&UnSignNum::Usize(b), UnSignNum::U128(a)) => UnSignNum::U128   (a - b as u128),
             }
         }
+
+        pub fn mul(&self, rhs: Self) -> Self {
+            match (self, rhs) {
+                (&UnSignNum::U8(a), UnSignNum::U8(b)) => UnSignNum::U8               (a * b),
+                (&UnSignNum::U16(a), UnSignNum::U16(b)) => UnSignNum::U16          (a * b),
+                (&UnSignNum::U32(a), UnSignNum::U32(b)) => UnSignNum::U32          (a * b),
+                (&UnSignNum::U64(a), UnSignNum::U64(b)) => UnSignNum::U64          (a * b),
+                (&UnSignNum::U128(a), UnSignNum::U128(b)) => UnSignNum::U128     (a * b),
+                (&UnSignNum::Usize(a), UnSignNum::Usize(b)) => UnSignNum::Usize(a * b),
+
+                (&UnSignNum::U8(b), UnSignNum::U16(a)) => UnSignNum::U16            (a * b as u16),
+                (&UnSignNum::U8(b), UnSignNum::U32(a)) => UnSignNum::U32            (a * b as u32),
+                (&UnSignNum::U8(b), UnSignNum::U64(a)) => UnSignNum::U64            (a * b as u64),
+                (&UnSignNum::U8(b), UnSignNum::U128(a)) => UnSignNum::U128         (a * b as u128),
+                (&UnSignNum::U8(b), UnSignNum::Usize(a)) => UnSignNum::Usize      (a * b as usize),
+
+                (&UnSignNum::U16(b), UnSignNum::U8(a)) => UnSignNum::U16            (b * a as u16),
+                (&UnSignNum::U16(b), UnSignNum::U32(a)) => UnSignNum::U32          (a * b as u32),
+                (&UnSignNum::U16(b), UnSignNum::U64(a)) => UnSignNum::U64          (a * b as u64),
+                (&UnSignNum::U16(b), UnSignNum::U128(a)) => UnSignNum::U128       (a * b as u128),
+                (&UnSignNum::U16(b), UnSignNum::Usize(a)) => UnSignNum::Usize    (a * b as usize),
+
+                (&UnSignNum::U32(b), UnSignNum::U8(a)) => UnSignNum::U32            (b * a as u32),
+                (&UnSignNum::U32(b), UnSignNum::U16(a)) => UnSignNum::U32          (b * a as u32),
+                (&UnSignNum::U32(b), UnSignNum::U64(a)) => UnSignNum::U64          (a * b as u64),
+                (&UnSignNum::U32(b), UnSignNum::U128(a)) => UnSignNum::U128       (a * b as u128),
+                (&UnSignNum::U32(b), UnSignNum::Usize(a)) => UnSignNum::Usize    (a * b as usize),
+
+                (&UnSignNum::U64(b), UnSignNum::U8(a)) => UnSignNum::U64            (b * a as u64),
+                (&UnSignNum::U64(b), UnSignNum::U16(a)) => UnSignNum::U64          (b * a as u64),
+                (&UnSignNum::U64(b), UnSignNum::U32(a)) => UnSignNum::U64          (b * a as u64),
+                (&UnSignNum::U64(b), UnSignNum::U128(a)) => UnSignNum::U128       (a * b as u128),
+                (&UnSignNum::U64(b), UnSignNum::Usize(a)) => UnSignNum::Usize    (a * b as usize),
+
+                (&UnSignNum::U128(b), UnSignNum::U8(a)) => UnSignNum::U128         (b * a as u128),
+                (&UnSignNum::U128(b), UnSignNum::U16(a)) => UnSignNum::U128       (b * a as u128),
+                (&UnSignNum::U128(b), UnSignNum::U32(a)) => UnSignNum::U128       (b * a as u128),
+                (&UnSignNum::U128(b), UnSignNum::U64(a)) => UnSignNum::U128       (b * a as u128),
+                (&UnSignNum::U128(b), UnSignNum::Usize(a)) => UnSignNum::U128   (b * a as u128),
+
+                (&UnSignNum::Usize(b), UnSignNum::U8(a)) => UnSignNum::Usize      (b * a as usize),
+                (&UnSignNum::Usize(b), UnSignNum::U16(a)) => UnSignNum::Usize    (b * a as usize),
+                (&UnSignNum::Usize(b), UnSignNum::U32(a)) => UnSignNum::Usize    (b * a as usize),
+                (&UnSignNum::Usize(b), UnSignNum::U64(a)) => UnSignNum::Usize    (b * a as usize),
+                (&UnSignNum::Usize(b), UnSignNum::U128(a)) => UnSignNum::U128   (a * b as u128),
+            }
+        }
+
+        pub fn div(&self, rhs: Self) -> Self {
+            match (self, rhs) {
+                (&UnSignNum::U8(a), UnSignNum::U8(b)) => UnSignNum::U8               (a / b),
+                (&UnSignNum::U16(a), UnSignNum::U16(b)) => UnSignNum::U16          (a / b),
+                (&UnSignNum::U32(a), UnSignNum::U32(b)) => UnSignNum::U32          (a / b),
+                (&UnSignNum::U64(a), UnSignNum::U64(b)) => UnSignNum::U64          (a / b),
+                (&UnSignNum::U128(a), UnSignNum::U128(b)) => UnSignNum::U128     (a / b),
+                (&UnSignNum::Usize(a), UnSignNum::Usize(b)) => UnSignNum::Usize(a / b),
+
+                (&UnSignNum::U8(b), UnSignNum::U16(a)) => UnSignNum::U16            (a / b as u16),
+                (&UnSignNum::U8(b), UnSignNum::U32(a)) => UnSignNum::U32            (a / b as u32),
+                (&UnSignNum::U8(b), UnSignNum::U64(a)) => UnSignNum::U64            (a / b as u64),
+                (&UnSignNum::U8(b), UnSignNum::U128(a)) => UnSignNum::U128         (a / b as u128),
+                (&UnSignNum::U8(b), UnSignNum::Usize(a)) => UnSignNum::Usize      (a / b as usize),
+
+                (&UnSignNum::U16(b), UnSignNum::U8(a)) => UnSignNum::U16            (b / a as u16),
+                (&UnSignNum::U16(b), UnSignNum::U32(a)) => UnSignNum::U32          (a / b as u32),
+                (&UnSignNum::U16(b), UnSignNum::U64(a)) => UnSignNum::U64          (a / b as u64),
+                (&UnSignNum::U16(b), UnSignNum::U128(a)) => UnSignNum::U128       (a / b as u128),
+                (&UnSignNum::U16(b), UnSignNum::Usize(a)) => UnSignNum::Usize    (a / b as usize),
+
+                (&UnSignNum::U32(b), UnSignNum::U8(a)) => UnSignNum::U32            (b / a as u32),
+                (&UnSignNum::U32(b), UnSignNum::U16(a)) => UnSignNum::U32          (b / a as u32),
+                (&UnSignNum::U32(b), UnSignNum::U64(a)) => UnSignNum::U64          (a / b as u64),
+                (&UnSignNum::U32(b), UnSignNum::U128(a)) => UnSignNum::U128       (a / b as u128),
+                (&UnSignNum::U32(b), UnSignNum::Usize(a)) => UnSignNum::Usize    (a / b as usize),
+
+                (&UnSignNum::U64(b), UnSignNum::U8(a)) => UnSignNum::U64            (b / a as u64),
+                (&UnSignNum::U64(b), UnSignNum::U16(a)) => UnSignNum::U64          (b / a as u64),
+                (&UnSignNum::U64(b), UnSignNum::U32(a)) => UnSignNum::U64          (b / a as u64),
+                (&UnSignNum::U64(b), UnSignNum::U128(a)) => UnSignNum::U128       (a / b as u128),
+                (&UnSignNum::U64(b), UnSignNum::Usize(a)) => UnSignNum::Usize    (a / b as usize),
+
+                (&UnSignNum::U128(b), UnSignNum::U8(a)) => UnSignNum::U128         (b / a as u128),
+                (&UnSignNum::U128(b), UnSignNum::U16(a)) => UnSignNum::U128       (b / a as u128),
+                (&UnSignNum::U128(b), UnSignNum::U32(a)) => UnSignNum::U128       (b / a as u128),
+                (&UnSignNum::U128(b), UnSignNum::U64(a)) => UnSignNum::U128       (b / a as u128),
+                (&UnSignNum::U128(b), UnSignNum::Usize(a)) => UnSignNum::U128   (b / a as u128),
+
+                (&UnSignNum::Usize(b), UnSignNum::U8(a)) => UnSignNum::Usize      (b / a as usize),
+                (&UnSignNum::Usize(b), UnSignNum::U16(a)) => UnSignNum::Usize    (b / a as usize),
+                (&UnSignNum::Usize(b), UnSignNum::U32(a)) => UnSignNum::Usize    (b / a as usize),
+                (&UnSignNum::Usize(b), UnSignNum::U64(a)) => UnSignNum::Usize    (b / a as usize),
+                (&UnSignNum::Usize(b), UnSignNum::U128(a)) => UnSignNum::U128   (a / b as u128),
+            }
+        }
+
+        pub fn to_i(&self) -> SignNum {
+            match self {
+                &UnSignNum::U8(a) => SignNum::I16(a as i16),
+                &UnSignNum::U16(a) => SignNum::I32(a as i32),
+                &UnSignNum::U32(a) => SignNum::I64(a as i64),
+                &UnSignNum::U64(a) => SignNum::I128(a as i128),
+                &UnSignNum::U128(a) => SignNum::I128(a as i128),
+                &UnSignNum::Usize(a) => SignNum::Isize(a as isize),
+            }
+        }
+
+        pub fn to_f32(&self) -> Float {
+            match self {
+                &UnSignNum::U8(a) => Float::F32(a as f32),
+                &UnSignNum::U16(a) => Float::F32(a as f32),
+                &UnSignNum::U32(a) => Float::F32(a as f32),
+                &UnSignNum::U64(a) => Float::F32(a as f32),
+                &UnSignNum::U128(a) => Float::F32(a as f32),
+                &UnSignNum::Usize(a) => Float::F32(a as f32),
+            }
+        }
+
+        pub fn to_f64(&self) -> Float {
+            match self {
+                &UnSignNum::U8(a) => Float::F64(a as f64),
+                &UnSignNum::U16(a) => Float::F64(a as f64),
+                &UnSignNum::U32(a) => Float::F64(a as f64),
+                &UnSignNum::U64(a) => Float::F64(a as f64),
+                &UnSignNum::U128(a) => Float::F64(a as f64),
+                &UnSignNum::Usize(a) => Float::F64(a as f64),
+            }
+        }
+    }
+
+    impl SignNum {
+        pub fn add(&self, rhs: Self) -> Self {
+            match (self, rhs) {
+                (&SignNum::I8(a), SignNum::I8(b)) => SignNum::I8               (a + b),
+                (&SignNum::I16(a), SignNum::I16(b)) => SignNum::I16          (a + b),
+                (&SignNum::I32(a), SignNum::I32(b)) => SignNum::I32          (a + b),
+                (&SignNum::I64(a), SignNum::I64(b)) => SignNum::I64          (a + b),
+                (&SignNum::I128(a), SignNum::I128(b)) => SignNum::I128     (a + b),
+                (&SignNum::Isize(a), SignNum::Isize(b)) => SignNum::Isize(a + b),
+
+                (&SignNum::I8(b), SignNum::I16(a)) => SignNum::I16            (a + b as i16),
+                (&SignNum::I8(b), SignNum::I32(a)) => SignNum::I32            (a + b as i32),
+                (&SignNum::I8(b), SignNum::I64(a)) => SignNum::I64            (a + b as i64),
+                (&SignNum::I8(b), SignNum::I128(a)) => SignNum::I128         (a + b as i128),
+                (&SignNum::I8(b), SignNum::Isize(a)) => SignNum::Isize      (a + b as isize),
+
+                (&SignNum::I16(b), SignNum::I8(a)) => SignNum::I16            (b + a as i16),
+                (&SignNum::I16(b), SignNum::I32(a)) => SignNum::I32          (a + b as i32),
+                (&SignNum::I16(b), SignNum::I64(a)) => SignNum::I64          (a + b as i64),
+                (&SignNum::I16(b), SignNum::I128(a)) => SignNum::I128       (a + b as i128),
+                (&SignNum::I16(b), SignNum::Isize(a)) => SignNum::Isize    (a + b as isize),
+
+                (&SignNum::I32(b), SignNum::I8(a)) => SignNum::I32            (b + a as i32),
+                (&SignNum::I32(b), SignNum::I16(a)) => SignNum::I32          (b + a as i32),
+                (&SignNum::I32(b), SignNum::I64(a)) => SignNum::I64          (a + b as i64),
+                (&SignNum::I32(b), SignNum::I128(a)) => SignNum::I128       (a + b as i128),
+                (&SignNum::I32(b), SignNum::Isize(a)) => SignNum::Isize    (a + b as isize),
+
+                (&SignNum::I64(b), SignNum::I8(a)) => SignNum::I64            (b + a as i64),
+                (&SignNum::I64(b), SignNum::I16(a)) => SignNum::I64          (b + a as i64),
+                (&SignNum::I64(b), SignNum::I32(a)) => SignNum::I64          (b + a as i64),
+                (&SignNum::I64(b), SignNum::I128(a)) => SignNum::I128       (a + b as i128),
+                (&SignNum::I64(b), SignNum::Isize(a)) => SignNum::Isize    (a + b as isize),
+
+                (&SignNum::I128(b), SignNum::I8(a)) => SignNum::I128         (b + a as i128),
+                (&SignNum::I128(b), SignNum::I16(a)) => SignNum::I128       (b + a as i128),
+                (&SignNum::I128(b), SignNum::I32(a)) => SignNum::I128       (b + a as i128),
+                (&SignNum::I128(b), SignNum::I64(a)) => SignNum::I128       (b + a as i128),
+                (&SignNum::I128(b), SignNum::Isize(a)) => SignNum::I128   (b + a as i128),
+
+                (&SignNum::Isize(b), SignNum::I8(a)) => SignNum::Isize      (b + a as isize),
+                (&SignNum::Isize(b), SignNum::I16(a)) => SignNum::Isize    (b + a as isize),
+                (&SignNum::Isize(b), SignNum::I32(a)) => SignNum::Isize    (b + a as isize),
+                (&SignNum::Isize(b), SignNum::I64(a)) => SignNum::Isize    (b + a as isize),
+                (&SignNum::Isize(b), SignNum::I128(a)) => SignNum::I128   (a + b as i128),
+            }
+        }
+
+        pub fn sub(&self, rhs: Self) -> Self {
+            match (self, rhs) {
+                (&SignNum::I8(a), SignNum::I8(b)) => SignNum::I8               (a - b),
+                (&SignNum::I16(a), SignNum::I16(b)) => SignNum::I16          (a - b),
+                (&SignNum::I32(a), SignNum::I32(b)) => SignNum::I32          (a - b),
+                (&SignNum::I64(a), SignNum::I64(b)) => SignNum::I64          (a - b),
+                (&SignNum::I128(a), SignNum::I128(b)) => SignNum::I128     (a - b),
+                (&SignNum::Isize(a), SignNum::Isize(b)) => SignNum::Isize(a - b),
+
+                (&SignNum::I8(b), SignNum::I16(a)) => SignNum::I16            (a - b as i16),
+                (&SignNum::I8(b), SignNum::I32(a)) => SignNum::I32            (a - b as i32),
+                (&SignNum::I8(b), SignNum::I64(a)) => SignNum::I64            (a - b as i64),
+                (&SignNum::I8(b), SignNum::I128(a)) => SignNum::I128         (a - b as i128),
+                (&SignNum::I8(b), SignNum::Isize(a)) => SignNum::Isize      (a - b as isize),
+
+                (&SignNum::I16(b), SignNum::I8(a)) => SignNum::I16            (b - a as i16),
+                (&SignNum::I16(b), SignNum::I32(a)) => SignNum::I32          (a - b as i32),
+                (&SignNum::I16(b), SignNum::I64(a)) => SignNum::I64          (a - b as i64),
+                (&SignNum::I16(b), SignNum::I128(a)) => SignNum::I128       (a - b as i128),
+                (&SignNum::I16(b), SignNum::Isize(a)) => SignNum::Isize    (a - b as isize),
+
+                (&SignNum::I32(b), SignNum::I8(a)) => SignNum::I32            (b - a as i32),
+                (&SignNum::I32(b), SignNum::I16(a)) => SignNum::I32          (b - a as i32),
+                (&SignNum::I32(b), SignNum::I64(a)) => SignNum::I64          (a - b as i64),
+                (&SignNum::I32(b), SignNum::I128(a)) => SignNum::I128       (a - b as i128),
+                (&SignNum::I32(b), SignNum::Isize(a)) => SignNum::Isize    (a - b as isize),
+
+                (&SignNum::I64(b), SignNum::I8(a)) => SignNum::I64            (b - a as i64),
+                (&SignNum::I64(b), SignNum::I16(a)) => SignNum::I64          (b - a as i64),
+                (&SignNum::I64(b), SignNum::I32(a)) => SignNum::I64          (b - a as i64),
+                (&SignNum::I64(b), SignNum::I128(a)) => SignNum::I128       (a - b as i128),
+                (&SignNum::I64(b), SignNum::Isize(a)) => SignNum::Isize    (a - b as isize),
+
+                (&SignNum::I128(b), SignNum::I8(a)) => SignNum::I128         (b - a as i128),
+                (&SignNum::I128(b), SignNum::I16(a)) => SignNum::I128       (b - a as i128),
+                (&SignNum::I128(b), SignNum::I32(a)) => SignNum::I128       (b - a as i128),
+                (&SignNum::I128(b), SignNum::I64(a)) => SignNum::I128       (b - a as i128),
+                (&SignNum::I128(b), SignNum::Isize(a)) => SignNum::I128   (b - a as i128),
+
+                (&SignNum::Isize(b), SignNum::I8(a)) => SignNum::Isize      (b - a as isize),
+                (&SignNum::Isize(b), SignNum::I16(a)) => SignNum::Isize    (b - a as isize),
+                (&SignNum::Isize(b), SignNum::I32(a)) => SignNum::Isize    (b - a as isize),
+                (&SignNum::Isize(b), SignNum::I64(a)) => SignNum::Isize    (b - a as isize),
+                (&SignNum::Isize(b), SignNum::I128(a)) => SignNum::I128   (a - b as i128),
+            }
+        }
+
+        pub fn mul(&self, rhs: Self) -> Self {
+            match (self, rhs) {
+                (&SignNum::I8(a), SignNum::I8(b)) => SignNum::I8               (a * b),
+                (&SignNum::I16(a), SignNum::I16(b)) => SignNum::I16          (a * b),
+                (&SignNum::I32(a), SignNum::I32(b)) => SignNum::I32          (a * b),
+                (&SignNum::I64(a), SignNum::I64(b)) => SignNum::I64          (a * b),
+                (&SignNum::I128(a), SignNum::I128(b)) => SignNum::I128     (a * b),
+                (&SignNum::Isize(a), SignNum::Isize(b)) => SignNum::Isize(a * b),
+
+                (&SignNum::I8(b), SignNum::I16(a)) => SignNum::I16            (a * b as i16),
+                (&SignNum::I8(b), SignNum::I32(a)) => SignNum::I32            (a * b as i32),
+                (&SignNum::I8(b), SignNum::I64(a)) => SignNum::I64            (a * b as i64),
+                (&SignNum::I8(b), SignNum::I128(a)) => SignNum::I128         (a * b as i128),
+                (&SignNum::I8(b), SignNum::Isize(a)) => SignNum::Isize      (a * b as isize),
+
+                (&SignNum::I16(b), SignNum::I8(a)) => SignNum::I16            (b * a as i16),
+                (&SignNum::I16(b), SignNum::I32(a)) => SignNum::I32          (a * b as i32),
+                (&SignNum::I16(b), SignNum::I64(a)) => SignNum::I64          (a * b as i64),
+                (&SignNum::I16(b), SignNum::I128(a)) => SignNum::I128       (a * b as i128),
+                (&SignNum::I16(b), SignNum::Isize(a)) => SignNum::Isize    (a * b as isize),
+
+                (&SignNum::I32(b), SignNum::I8(a)) => SignNum::I32            (b * a as i32),
+                (&SignNum::I32(b), SignNum::I16(a)) => SignNum::I32          (b * a as i32),
+                (&SignNum::I32(b), SignNum::I64(a)) => SignNum::I64          (a * b as i64),
+                (&SignNum::I32(b), SignNum::I128(a)) => SignNum::I128       (a * b as i128),
+                (&SignNum::I32(b), SignNum::Isize(a)) => SignNum::Isize    (a * b as isize),
+
+                (&SignNum::I64(b), SignNum::I8(a)) => SignNum::I64            (b * a as i64),
+                (&SignNum::I64(b), SignNum::I16(a)) => SignNum::I64          (b * a as i64),
+                (&SignNum::I64(b), SignNum::I32(a)) => SignNum::I64          (b * a as i64),
+                (&SignNum::I64(b), SignNum::I128(a)) => SignNum::I128       (a * b as i128),
+                (&SignNum::I64(b), SignNum::Isize(a)) => SignNum::Isize    (a * b as isize),
+
+                (&SignNum::I128(b), SignNum::I8(a)) => SignNum::I128         (b * a as i128),
+                (&SignNum::I128(b), SignNum::I16(a)) => SignNum::I128       (b * a as i128),
+                (&SignNum::I128(b), SignNum::I32(a)) => SignNum::I128       (b * a as i128),
+                (&SignNum::I128(b), SignNum::I64(a)) => SignNum::I128       (b * a as i128),
+                (&SignNum::I128(b), SignNum::Isize(a)) => SignNum::I128   (b * a as i128),
+
+                (&SignNum::Isize(b), SignNum::I8(a)) => SignNum::Isize      (b * a as isize),
+                (&SignNum::Isize(b), SignNum::I16(a)) => SignNum::Isize    (b * a as isize),
+                (&SignNum::Isize(b), SignNum::I32(a)) => SignNum::Isize    (b * a as isize),
+                (&SignNum::Isize(b), SignNum::I64(a)) => SignNum::Isize    (b * a as isize),
+                (&SignNum::Isize(b), SignNum::I128(a)) => SignNum::I128   (a * b as i128),
+            }
+        }
+
+        pub fn div(&self, rhs: Self) -> Self {
+            match (self, rhs) {
+                (&SignNum::I8(a), SignNum::I8(b)) => SignNum::I8               (a / b),
+                (&SignNum::I16(a), SignNum::I16(b)) => SignNum::I16          (a / b),
+                (&SignNum::I32(a), SignNum::I32(b)) => SignNum::I32          (a / b),
+                (&SignNum::I64(a), SignNum::I64(b)) => SignNum::I64          (a / b),
+                (&SignNum::I128(a), SignNum::I128(b)) => SignNum::I128     (a / b),
+                (&SignNum::Isize(a), SignNum::Isize(b)) => SignNum::Isize(a / b),
+
+                (&SignNum::I8(b), SignNum::I16(a)) => SignNum::I16            (a / b as i16),
+                (&SignNum::I8(b), SignNum::I32(a)) => SignNum::I32            (a / b as i32),
+                (&SignNum::I8(b), SignNum::I64(a)) => SignNum::I64            (a / b as i64),
+                (&SignNum::I8(b), SignNum::I128(a)) => SignNum::I128         (a / b as i128),
+                (&SignNum::I8(b), SignNum::Isize(a)) => SignNum::Isize      (a / b as isize),
+
+                (&SignNum::I16(b), SignNum::I8(a)) => SignNum::I16            (b / a as i16),
+                (&SignNum::I16(b), SignNum::I32(a)) => SignNum::I32          (a / b as i32),
+                (&SignNum::I16(b), SignNum::I64(a)) => SignNum::I64          (a / b as i64),
+                (&SignNum::I16(b), SignNum::I128(a)) => SignNum::I128       (a / b as i128),
+                (&SignNum::I16(b), SignNum::Isize(a)) => SignNum::Isize    (a / b as isize),
+
+                (&SignNum::I32(b), SignNum::I8(a)) => SignNum::I32            (b / a as i32),
+                (&SignNum::I32(b), SignNum::I16(a)) => SignNum::I32          (b / a as i32),
+                (&SignNum::I32(b), SignNum::I64(a)) => SignNum::I64          (a / b as i64),
+                (&SignNum::I32(b), SignNum::I128(a)) => SignNum::I128       (a / b as i128),
+                (&SignNum::I32(b), SignNum::Isize(a)) => SignNum::Isize    (a / b as isize),
+
+                (&SignNum::I64(b), SignNum::I8(a)) => SignNum::I64            (b / a as i64),
+                (&SignNum::I64(b), SignNum::I16(a)) => SignNum::I64          (b / a as i64),
+                (&SignNum::I64(b), SignNum::I32(a)) => SignNum::I64          (b / a as i64),
+                (&SignNum::I64(b), SignNum::I128(a)) => SignNum::I128       (a / b as i128),
+                (&SignNum::I64(b), SignNum::Isize(a)) => SignNum::Isize    (a / b as isize),
+
+                (&SignNum::I128(b), SignNum::I8(a)) => SignNum::I128         (b / a as i128),
+                (&SignNum::I128(b), SignNum::I16(a)) => SignNum::I128       (b / a as i128),
+                (&SignNum::I128(b), SignNum::I32(a)) => SignNum::I128       (b / a as i128),
+                (&SignNum::I128(b), SignNum::I64(a)) => SignNum::I128       (b / a as i128),
+                (&SignNum::I128(b), SignNum::Isize(a)) => SignNum::I128   (b / a as i128),
+
+                (&SignNum::Isize(b), SignNum::I8(a)) => SignNum::Isize      (b / a as isize),
+                (&SignNum::Isize(b), SignNum::I16(a)) => SignNum::Isize    (b / a as isize),
+                (&SignNum::Isize(b), SignNum::I32(a)) => SignNum::Isize    (b / a as isize),
+                (&SignNum::Isize(b), SignNum::I64(a)) => SignNum::Isize    (b / a as isize),
+                (&SignNum::Isize(b), SignNum::I128(a)) => SignNum::I128   (a / b as i128),
+            }
+        }
+
+        pub fn to_u(&self) -> UnSignNum {
+            match self {
+                &SignNum::I8(a) => UnSignNum::U8(a as u8),
+                &SignNum::I16(a) => UnSignNum::U8(a as u8),
+                &SignNum::I32(a) => UnSignNum::U16(a as u16),
+                &SignNum::I64(a) => UnSignNum::U32(a as u32),
+                &SignNum::I128(a) => UnSignNum::U64(a as u64),
+                &SignNum::Isize(a) => UnSignNum::Usize(a as usize),
+            }
+        }
+
+        pub fn to_f32(&self) -> Float {
+            match self {
+                &SignNum::I8(a) => Float::F32(a as f32),
+                &SignNum::I16(a) => Float::F32(a as f32),
+                &SignNum::I32(a) => Float::F32(a as f32),
+                &SignNum::I64(a) => Float::F32(a as f32),
+                &SignNum::I128(a) => Float::F32(a as f32),
+                &SignNum::Isize(a) => Float::F32(a as f32),
+            }
+        }
+
+        pub fn to_f64(&self) -> Float {
+            match self {
+                &SignNum::I8(a) => Float::F32(a as f32),
+                &SignNum::I16(a) => Float::F32(a as f32),
+                &SignNum::I32(a) => Float::F32(a as f32),
+                &SignNum::I64(a) => Float::F32(a as f32),
+                &SignNum::I128(a) => Float::F32(a as f32),
+                &SignNum::Isize(a) => Float::F32(a as f32),
+            }
+        }
     }
 }
 
@@ -184,9 +534,7 @@ impl Num<'_> {
             Num::Fixed(fix) => fix.clone(),
             Num::Var(var) => var.cal(),
             Num::Undefined => fixed_num::FixedNum::Undefined,
-            Num::Expr(expr) => {
-
-            }
+            Num::Expr(expr) => expr.cal()
         }
     }
 }
