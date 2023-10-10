@@ -5,4 +5,3 @@ pub use expression::*;
 pub use op::*;
 
 use super::num_type;
-use super::traits;

@@ -1,4 +1,4 @@
-use super::WARN_LEVEL;
+use super::config::WARN_LEVEL;
 
 pub fn had_not_init() {
     match WARN_LEVEL {

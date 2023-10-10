@@ -74,6 +74,7 @@ pub fn sub_one(k: &str) {
 pub fn remove(k: &str) -> Result<(), &str> {
     match get(k) {
         Some(num) => {
+            println!("{num}");
             if num == &0 {
                 unsafe {
                     if let Some(map) = COUNT.as_mut() {

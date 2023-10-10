@@ -1,12 +1,4 @@
-use super::{traits::{Prt, Val}, Num, Name, name, glo_var, warn, fixed_num};
-use std::cell::RefCell;
-
-// #[derive(Debug, Clone, Copy)]
-// pub enum ChangeNum<'a> {
-//     Var(&'a Variable<'a>),
-//     Expr(&'a Expr<'a>),
-//     Undefined,
-// }
+use super::{val::Val, Num, Name, name, glo_var, warn, fixed_num, count};
 
 #[derive(Debug, Clone)]
 pub struct Variable<'a> {
@@ -26,6 +18,7 @@ impl<'a: 'static> Variable<'a> {
                 _ => {warn::unacc_type(); return Err("T-1")}
             };
             glo_var::insert(name, Self { name: Name::Str(name), num });
+            count::insert(name, 0);
             Ok(glo_var::get(name).unwrap())
         }
     }
@@ -45,7 +38,10 @@ impl<'a: 'static> Variable<'a> {
 impl Variable<'_> {
     pub fn drop_name(&self) {
         match self.name {
-            Name::Str(name) => name::delete_name(name),
+            Name::Str(name) => {
+                let _ = count::remove(name); 
+                name::delete_name(name)
+            },
             _ => ()
         }
     }
@@ -59,25 +55,14 @@ impl Variable<'_> {
     }
 }
 
-// impl Val for Variable<'_> {
-//     fn val(&self) -> FixedNum {
-//         match self.expr {
-//             ChangeNum::Var(num) => num.val().clone(),
-//             ChangeNum::Expr(expr) => expr.val().clone(),
-//             ChangeNum::Undefined => FixedNum::Undefined,
-//         }
-//     }
-// }
-
-impl Prt for Variable<'_> {
-    fn print(&self) -> String {
-        // format!("Variable< name:{}, expr:{:?} >", self.name, self.val())
-        format!("Variable< name:{:?} >", self.name )
+impl Val for Variable<'_> {
+    fn val(&self) -> Num<'_> {
+        Num::Fixed(self.cal())
     }
 }
 
 impl<'a> std::fmt::Display for Variable<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.print())
+        write!(f, "Variable< name:{:?} >", self.name)
     }
 }

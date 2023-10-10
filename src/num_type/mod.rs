@@ -7,9 +7,8 @@ pub use constant::*;
 pub use num::*;
 
 use super::operation::{Op, Expr, BasicOp};
-use super::traits;
-use super::static_modifier::{name, glo_cons, glo_var};
-use super::config::*;
+use super::val;
+use super::static_modifier::{name, glo_cons, glo_var, count};
 use super::warn;
 
 #[derive(Debug, Clone)]
