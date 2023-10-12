@@ -1,4 +1,4 @@
-use crate::warn;
+use crate::{warn, val::Val};
 
 use super::{Variable, Constant, Expr, Op, BasicOp, count};
 
@@ -738,6 +738,16 @@ impl Num<'_> {
 
     pub fn replace(&mut self, to: Self) {
         *self = to
+    }
+
+    pub fn val_print(&self) -> String {
+        match self {
+            Num::Cons(cons) => cons.val_print(),
+            Num::Var(var) => var.val_print(),
+            Num::Expr(expr) => format!("({})", expr),
+            Num::Fixed(fix) => format!("{}", fix),
+            Num::Undefined => "UNDEFINED".to_string()
+        }
     }
 }
 

@@ -55,6 +55,10 @@ impl Constant<'_> {
             num: Num::Undefined,
         }
     }
+    
+    pub fn val_print(&self) -> String {
+        format!("{}", self.num)
+    }
 }
 
 impl<'a> Constant<'a> {

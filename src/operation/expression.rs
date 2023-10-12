@@ -1,8 +1,8 @@
-use crate::num_type::Constant;
 use crate::num_type::fixed_num::{Float, FixedNum};
 use crate::static_modifier::count;
 use super::num_type::Num;
 use super::op::{Op, BasicOp, Tri, Expo};
+use super::FULL_DISPLAY;
 
 
 #[derive(Debug, Clone)]
@@ -239,6 +239,11 @@ impl Expr<'_> {
 
 impl std::fmt::Display for Expr<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let a = if FULL_DISPLAY { self.a.val_print() } else { self.a.symbol() };
+        let b = if FULL_DISPLAY { self.b.val_print() } else { self.b.symbol() };
+
+        // println!("{}, {}", a, b);
+
         let formula = match self.expr_type {
             Op::Basic(base) => {
                 let sign = match base {
@@ -247,14 +252,14 @@ impl std::fmt::Display for Expr<'_> {
                     BasicOp::Mul => "*",
                     BasicOp::Div => "/",
                 };
-                format!("{} {} {}", self.a.symbol(), sign, self.b.symbol())
+                format!("({} {} {})", a, sign, b)
             }
             Op::Expo(expo) => {
                 let sign = match expo {
                     Expo::Exp => "exp",
                     Expo::Log => "log",
                 };
-                format!("{}({}, {})", sign, self.a.symbol(), self.b.symbol())
+                format!("{}({}, {})", sign, a, b)
             },
             Op::Tri(tri) => {
                 let sign = match tri {
@@ -265,7 +270,7 @@ impl std::fmt::Display for Expr<'_> {
                     Tri::Arccos => "arccos",
                     Tri::Arctan => "acrtan",
                 };
-                format!("{}({})", sign, self.a.symbol())
+                format!("{}({})", sign, a)
             },
         };
         write!(f, "{}", formula)

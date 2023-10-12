@@ -67,6 +67,10 @@ impl Variable<'_> {
     pub fn droppable(&self) -> bool {
         count::check_zero(self.name().to_str())
     }
+
+    pub fn val_print(&self) -> String {
+        format!("({})", self.num.borrow())
+    }
 }
 
 impl<'a> Variable<'a> {
