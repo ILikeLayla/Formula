@@ -11,8 +11,26 @@ use super::val;
 use super::static_modifier::{name, glo_cons, glo_var, count};
 use super::warn;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum Name<'a> {
     Str(&'a str),
     PlaceHolder
+}
+
+impl Name<'_> {
+    pub fn to_str(&self) -> &str {
+        match self {
+            Name::Str(a) => a,
+            Name::PlaceHolder => "",
+        }
+    }
+}
+
+impl std::fmt::Display for Name<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Name::Str(str) => write!(f, "{}", str),
+            Name::PlaceHolder => write!(f, "PLACEHOLDER"),
+        }
+    }
 }

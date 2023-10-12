@@ -1,4 +1,6 @@
+use crate::num_type::Constant;
 use crate::num_type::fixed_num::{Float, FixedNum};
+use crate::static_modifier::count;
 use super::num_type::Num;
 use super::op::{Op, BasicOp, Tri, Expo};
 
@@ -19,12 +21,47 @@ impl<'a> Expr<'a> {
 }
 
 impl Expr<'_> {
+    pub fn drop_borrow(&mut self) {
+        let mut check = (false, false);
+        
+        match self.a {
+            Num::Var(var) => count::sub_one(var.name().to_str()),
+            Num::Cons(cons) => count::sub_one(cons.name().to_str()),
+            Num::Expr(_) => check.0 = true,
+            _ => ()
+        }
+
+        match self.b {
+            Num::Var(var) => count::sub_one(var.name().to_str()),
+            Num::Cons(cons) => count::sub_one(cons.name().to_str()),
+            Num::Expr(_) => check.1 = true,
+            _ => ()
+        }
+
+        match check {
+            (true, true) => {
+                self.a.drop_borrow(); 
+                self.b.drop_borrow()
+            },
+            (true, false) => self.a.drop_borrow(),
+            (false, true) => self.b.drop_borrow(),
+            (false, false) => (),
+        }
+        
+        self.a = Num::Undefined;
+        self.b = Num::Undefined;
+    }
+
     pub fn cal(&self) -> FixedNum {
         match self.expr_type.clone() {
             Op::Basic(basic) => self.basic_cal(basic),
             _ => FixedNum::Undefined,
         }
     }
+
+    // pub fn expr(&self) -> Num {
+    //     Num::Expr(Box::new(self.clone()))
+    // }
 
     fn basic_cal(&self, op: BasicOp) -> FixedNum {
         match op {
@@ -202,6 +239,35 @@ impl Expr<'_> {
 
 impl std::fmt::Display for Expr<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Expr< a:{:?}, b:{:?}, operation:{:?} >", self.a, self.b, self.expr_type)
+        let formula = match self.expr_type {
+            Op::Basic(base) => {
+                let sign = match base {
+                    BasicOp::Add => "+",
+                    BasicOp::Sub => "-",
+                    BasicOp::Mul => "*",
+                    BasicOp::Div => "/",
+                };
+                format!("{} {} {}", self.a.symbol(), sign, self.b.symbol())
+            }
+            Op::Expo(expo) => {
+                let sign = match expo {
+                    Expo::Exp => "exp",
+                    Expo::Log => "log",
+                };
+                format!("{}({}, {})", sign, self.a.symbol(), self.b.symbol())
+            },
+            Op::Tri(tri) => {
+                let sign = match tri {
+                    Tri::Sin => "sin",
+                    Tri::Con => "cos",
+                    Tri::Tan => "tan",
+                    Tri::Arcsin => "arcsin",
+                    Tri::Arccos => "arccos",
+                    Tri::Arctan => "acrtan",
+                };
+                format!("{}({})", sign, self.a.symbol())
+            },
+        };
+        write!(f, "{}", formula)
     }
 }

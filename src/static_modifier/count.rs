@@ -52,6 +52,9 @@ fn get_mut(k: &str) -> Option<&mut usize> {
 }
 
 pub fn add(k: &str, num: usize, add: bool) {
+    if k == "" {
+        return ()
+    }
     if let Some(val) = get_mut(k) {
         if add {
             *val += num
@@ -74,7 +77,6 @@ pub fn sub_one(k: &str) {
 pub fn remove(k: &str) -> Result<(), &str> {
     match get(k) {
         Some(num) => {
-            println!("{num}");
             if num == &0 {
                 unsafe {
                     if let Some(map) = COUNT.as_mut() {
@@ -90,4 +92,8 @@ pub fn remove(k: &str) -> Result<(), &str> {
         },
         None => Err("SM-1/ SN-2")
     }
+}
+
+pub fn check_zero(k: &str) -> bool {
+    get(k) == Some(&0)
 }

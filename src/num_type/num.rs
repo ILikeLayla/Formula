@@ -1,3 +1,5 @@
+use crate::warn;
+
 use super::{Variable, Constant, Expr, Op, BasicOp, count};
 
 pub mod fixed_num {
@@ -22,6 +24,52 @@ pub mod fixed_num {
     #[derive(Debug, Copy, Clone)]
     pub enum Float {
         F32(f32), F64(f64)
+    }
+
+    impl std::fmt::Display for SignNum {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            match self {
+                SignNum::I8(num) => write!(f, "{}", num),
+                SignNum::I16(num) => write!(f, "{}", num),
+                SignNum::I32(num) => write!(f, "{}", num),
+                SignNum::I64(num) => write!(f, "{}", num),
+                SignNum::I128(num) => write!(f, "{}", num),
+                SignNum::Isize(num) => write!(f, "{}", num),
+            }
+        }
+    }
+
+    impl std::fmt::Display for UnSignNum {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            match self {
+                UnSignNum::U8(num) => write!(f, "{}", num),
+                UnSignNum::U16(num) => write!(f, "{}", num),
+                UnSignNum::U32(num) => write!(f, "{}", num),
+                UnSignNum::U64(num) => write!(f, "{}", num),
+                UnSignNum::U128(num) => write!(f, "{}", num),
+                UnSignNum::Usize(num) => write!(f, "{}", num),
+            }
+        }
+    }
+
+    impl std::fmt::Display for Float {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            match self {
+                Float::F32(num) => write!(f, "{}", num),
+                Float::F64(num) => write!(f, "{}", num),
+            }
+        }
+    }
+
+    impl std::fmt::Display for FixedNum {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            match self {
+                FixedNum::Sign(num) => write!(f, "{}", num),
+                FixedNum::UnSign(num) => write!(f, "{}", num),
+                FixedNum::Float(num) => write!(f, "{}", num),
+                FixedNum::Undefined => write!(f, "UNDEFINED"),
+            }
+        }
     }
 
     impl Float {
@@ -628,13 +676,36 @@ pub enum Num<'a> {
 }
 
 impl Num<'_> {
-    pub fn drop(self) {
+    pub fn drop(mut self) {
+        if self.droppable() {
+            self.drop_borrow();
+            match self {
+                Num::Var(var) => var.drop_name(),
+                Num::Cons(cons) => cons.drop_name(),
+                _ => ()
+            };
+            drop(self)
+        } else {
+            warn::delete_before_no_borrow()
+        }
+    }
+
+    pub fn symbol(&self) -> String {
         match self {
-            Num::Var(var) => var.drop_name(),
-            Num::Cons(cons) => cons.drop_name(),
-            _ => ()
-        };
-        drop(self)
+            Num::Cons(cons) => format!("{}", cons.name()),
+            Num::Var(var) => format!("{}", var.name()),
+            Num::Fixed(fix) => format!("{}", fix),
+            Num::Expr(expr) => format!("{}", *expr),
+            Num::Undefined => "UNDEFINED".to_string(),
+        }
+    }
+
+    pub fn droppable(&self) -> bool {
+        return match self {
+            Num::Cons(cons) => cons.droppable(),
+            Num::Var(var) => var.droppable(),
+            _ => true
+        }
     }
 
     pub fn cal(&self) -> fixed_num::FixedNum {
@@ -646,13 +717,63 @@ impl Num<'_> {
             Num::Expr(expr) => expr.cal()
         }
     }
+
+    pub fn drop_borrow(&mut self) {
+        match self.expr() {
+            Num::Cons(cons) => count::sub_one(cons.name().to_str()),
+            Num::Var(var) => count::sub_one(var.name().to_str()),
+            Num::Expr(mut expr) => (*expr).drop_borrow(),
+            _ => (),
+        }
+    }
+
+    pub fn expr(&self) -> Self {
+        match self {
+            Num::Var(var) => var.expr(),
+            Num::Cons(cons) => cons.expr(),
+            Num::Expr(expr) => Num::Expr(expr.clone()),
+            _ => Num::Undefined
+        }
+    }
+
+    pub fn replace(&mut self, to: Self) {
+        *self = to
+    }
+}
+
+impl<'a: 'static> Num<'a> {
+    pub fn change_val(&mut self, aim: Num<'a>) {
+        match self {
+            Num::Var(var) => var.change_num(aim),
+            _  => warn::type_unchangable(),
+        }
+    }
+}
+
+impl std::fmt::Display for Num<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Num::Cons(cons) => write!(f, "{}", cons),
+            Num::Var(var) => write!(f, "{}", var),
+            Num::Expr(expr) => write!(f, "{}", expr),
+            Num::Fixed(fix) => write!(f, "{}", fix),
+            Num::Undefined => write!(f, "UNDEFINED"),
+        }
+    }
 }
 
 impl std::ops::Add for Num<'_> {
     type Output = Self;
     fn add(self, rhs: Self) -> Self::Output {
         match &self {
-            &Num::Cons(cons) => count::add_one(cons.name())
+            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
+            &Num::Var(var) => count::add_one(var.name().to_str()),
+            _ => (),
+        }
+        match &rhs {
+            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
+            &Num::Var(var) => count::add_one(var.name().to_str()),
+            _ => (),
         }
         Expr::new(self, rhs, Op::Basic(BasicOp::Add))
     }
@@ -661,6 +782,16 @@ impl std::ops::Add for Num<'_> {
 impl std::ops::Sub for Num<'_> {
     type Output = Self;
     fn sub(self, rhs: Self) -> Self::Output {
+        match &self {
+            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
+            &Num::Var(var) => count::add_one(var.name().to_str()),
+            _ => (),
+        }
+        match &rhs {
+            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
+            &Num::Var(var) => count::add_one(var.name().to_str()),
+            _ => (),
+        }
         Expr::new(self, rhs, Op::Basic(BasicOp::Sub))
     }
 }
@@ -668,6 +799,16 @@ impl std::ops::Sub for Num<'_> {
 impl std::ops::Mul for Num<'_> {
     type Output = Self;
     fn mul(self, rhs: Self) -> Self::Output {
+        match &self {
+            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
+            &Num::Var(var) => count::add_one(var.name().to_str()),
+            _ => (),
+        }
+        match &rhs {
+            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
+            &Num::Var(var) => count::add_one(var.name().to_str()),
+            _ => (),
+        }
         Expr::new(self, rhs, Op::Basic(BasicOp::Mul))
     }
 }
@@ -675,6 +816,16 @@ impl std::ops::Mul for Num<'_> {
 impl std::ops::Div for Num<'_> {
     type Output = Self;
     fn div(self, rhs: Self) -> Self::Output {
+        match &self {
+            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
+            &Num::Var(var) => count::add_one(var.name().to_str()),
+            _ => (),
+        }
+        match &rhs {
+            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
+            &Num::Var(var) => count::add_one(var.name().to_str()),
+            _ => (),
+        }
         Expr::new(self, rhs, Op::Basic(BasicOp::Div))
     }
 }

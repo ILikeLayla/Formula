@@ -21,21 +21,22 @@ pub fn init() {
 
 #[cfg(test)]
 mod tests {
-    use crate::{num_type::{Variable, Constant}, init, val::Val};
+    use crate::{num_type::{Variable, Constant, Num}, init, val::Val, COUNT, NAME};
 
     #[test]
     fn test() {
         init();
-        let e = Constant::new("e", 2.71828_f32.val()).unwrap();
-        let pi = Constant::new("pi", 
-            3.1415926535897932384626.val()
-        ).unwrap();
-        let a = Variable::new("a", e.clone() + pi.clone()).unwrap();
-        // a.drop();
-        println!("1");
-        e.drop();
-        // e.drop();
-        // println!("{:?}", a.cal());
-        // println!("{:?}", a)
+
+        let mut input = Variable::new("input", Num::Undefined).unwrap();
+        let output = Variable::new("output", 2.val() * input.clone() + 3.val()).unwrap();
+
+        println!("{}", input);
+        input.change_val(4.val());
+        println!("{}", input);
+
+        println!();
+
+        println!("{}", output);
+        println!("{}", output.cal());
     }
 }

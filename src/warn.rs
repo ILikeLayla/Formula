@@ -47,3 +47,11 @@ pub fn name_used() {
         _ => ()
     }
 }
+
+pub fn type_unchangable() {
+    match WARN_LEVEL {
+        0 => panic!("ST-1"),
+        1 => println!("\x1b[93m[WARNING] ST-1\x1b[0m"),
+        _ => ()
+    }
+}

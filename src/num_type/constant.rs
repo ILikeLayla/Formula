@@ -1,6 +1,6 @@
 use super::{Num, name, glo_cons, fixed_num, Name, warn, val::Val, count};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Constant<'a> {
     name: Name<'a>,
     num: Num<'a>
@@ -28,11 +28,17 @@ impl Constant<'_> {
     pub fn drop_name(&self) {
         match self.name {
             Name::Str(name) => {
-                let _ = count::remove(name); 
-                name::delete_name(name)
+                if count::get(self.name.to_str()) == Some(&0) {
+                    name::delete_name(name); 
+                    let _ = count::remove(name);
+                }
             },
             _ => ()
         }
+    }
+
+    pub fn droppable(&self) -> bool {
+        count::check_zero(self.name().to_str())
     }
 
     pub fn name(&self) -> Name {
@@ -51,6 +57,15 @@ impl Constant<'_> {
     }
 }
 
+impl<'a> Constant<'a> {
+    pub fn expr(&'a self) -> Num {
+        match self.num {
+            Num::Cons(cons) => Num::Cons(cons),
+            _ => Num::Undefined
+        }
+    }
+}
+
 impl Val for Constant<'_> {
     fn val(&self) -> Num<'_> {
         Num::Fixed(self.cal())
@@ -59,6 +74,10 @@ impl Val for Constant<'_> {
 
 impl std::fmt::Display for Constant<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Constant< name:{:?}, number:{:?}>", self.name, self.val())
+        let name = match self.name {
+            Name::Str(str) => str,
+            Name::PlaceHolder => "PLACEHOLDER"
+        };
+        write!(f, "{} = {:?}", name, self.num)
     }
 }

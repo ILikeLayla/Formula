@@ -25,7 +25,7 @@ pub fn insert(k: &'static str, v: Variable<'static>) -> Option<Variable<'static>
     }
 }
 
-pub fn get(k: &str) -> Option<Num> {
+pub fn get<'a: 'static>(k: &'a str) -> Option<Num> {
     unsafe {
         if let Some(map) = &GLO_VAR_MAP {
             if let Some(var) = map.get(k) {
