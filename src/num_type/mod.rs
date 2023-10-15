@@ -10,6 +10,7 @@ use super::operation::{Op, Expr, BasicOp};
 use super::val;
 use super::static_modifier::{name, glo_cons, glo_var, count};
 use super::warn;
+use super::config::RUDE_DIV;
 
 #[derive(Debug, Clone, Copy)]
 pub enum Name<'a> {

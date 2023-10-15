@@ -1,5 +1,5 @@
 use super::{val::Val, Num, Name, name, glo_var, warn, fixed_num, count};
-use std::cell::RefCell;
+use std::cell::{RefCell, Ref};
 
 #[derive(Debug, Clone)]
 pub struct Variable<'a> {
@@ -91,6 +91,15 @@ impl<'a> std::fmt::Display for Variable<'a> {
             Name::Str(str) => str,
             Name::PlaceHolder => "PLACEHOLDER"
         };
-        write!(f, "{} = {}", name, self.num.borrow())
+
+        let words = match &*self.num.borrow() {
+            Num::Expr(expr) => {
+                let num_words = format!("{}", *expr);
+                (&num_words[1 .. (num_words.len()-1)]).to_string()
+            },
+            num => format!("{}", num)
+        };
+        
+        write!(f, "{} = {}", name, words)
     }
 }

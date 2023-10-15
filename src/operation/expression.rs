@@ -2,7 +2,7 @@ use crate::num_type::fixed_num::{Float, FixedNum};
 use crate::static_modifier::count;
 use super::num_type::Num;
 use super::op::{Op, BasicOp, Tri, Expo};
-use super::FULL_DISPLAY;
+use super::{RUDE_DIV, FULL_DISPLAY};
 
 
 #[derive(Debug, Clone)]
@@ -58,10 +58,6 @@ impl Expr<'_> {
             _ => FixedNum::Undefined,
         }
     }
-
-    // pub fn expr(&self) -> Num {
-    //     Num::Expr(Box::new(self.clone()))
-    // }
 
     fn basic_cal(&self, op: BasicOp) -> FixedNum {
         match op {
@@ -199,8 +195,8 @@ impl Expr<'_> {
 
             (FixedNum::Sign(a), num) => match num {
                 FixedNum::Undefined => FixedNum::Undefined,
-                FixedNum::Sign(b) => FixedNum::Sign(a.div(b)),
-                FixedNum::UnSign(b) => FixedNum::Sign(a.div(b.to_i())),
+                FixedNum::Sign(b) => FixedNum::Float(a.div(b)),
+                FixedNum::UnSign(b) => FixedNum::Sign(a.rude_div(b.to_i())),
                 FixedNum::Float(b) => FixedNum::Float(match b {
                     Float::F32(b) => a.to_f32().div(Float::F32(b)),
                     Float::F64(b) => a.to_f64().div(Float::F64(b))
@@ -209,8 +205,14 @@ impl Expr<'_> {
 
             (FixedNum::UnSign(a), num) => match num {
                 FixedNum::Undefined => FixedNum::Undefined,
-                FixedNum::Sign(b) => FixedNum::Sign(a.to_i().div(b)),
-                FixedNum::UnSign(b) => FixedNum::UnSign(a.div(b)),
+                FixedNum::Sign(b) => FixedNum::Float(a.div(b.to_u())),
+                FixedNum::UnSign(b) => {
+                    if RUDE_DIV {
+                        FixedNum::UnSign(a.rude_div(b))
+                    } else {
+                        FixedNum::Float(a.div(b))
+                    }
+                },
                 FixedNum::Float(b) => FixedNum::Float(match b {
                     Float::F32(b) => a.to_f32().div(Float::F32(b)),
                     Float::F64(b) => a.to_f64().div(Float::F64(b))
