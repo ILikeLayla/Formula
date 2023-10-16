@@ -25,10 +25,17 @@ impl<'a: 'static> Variable<'a> {
         }
     }
 
-    pub fn new_place_holder() -> Self {
+    pub fn new_place_holder_undefined() -> Self {
         Self {
             name: Name::PlaceHolder,
             num: RefCell::new(Num::Undefined),
+        }
+    }
+
+    pub fn new_place_holder(num: Num<'a>) -> Self {
+        Self {
+            name: Name::PlaceHolder,
+            num: RefCell::new(num),
         }
     }
 

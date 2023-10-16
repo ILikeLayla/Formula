@@ -8,11 +8,14 @@ pub mod static_modifier;
 pub mod warn;
 use std::collections::HashMap;
 
+use num_type::Num;
+
 static mut NAME:Vec<String> = Vec::new();
 static mut GLO_VAR_MAP: Option<HashMap<&str, num_type::Variable>> = None;
 static mut GLO_CONS_MAP: Option<HashMap<&str, num_type::Constant>> = None;
+static mut GLO_FUNC_MAP: Option<HashMap<&str, operation::Func>> = None;
 static mut COUNT: Option<HashMap<&str, usize>> = None;
-static mut GLO_FUNC_MAP: Option<HashMap<&str, _>> = None;
+static mut PLACE_HOLDER: Vec<Num> = Vec::new();
 
 pub fn init() {
     static_modifier::count::init();
