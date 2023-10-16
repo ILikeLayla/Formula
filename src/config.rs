@@ -6,6 +6,7 @@ pub const WARN_LEVEL: u8 = 1;
 pub const STEP: u8 = 20;
 pub const FULL_DISPLAY: bool = false;
 pub const RUDE_DIV: bool = false;
+pub const RUDE_SUB: bool = false;
 // ============================
 
 // CALCULUS-SETTING

@@ -12,6 +12,7 @@ static mut NAME:Vec<String> = Vec::new();
 static mut GLO_VAR_MAP: Option<HashMap<&str, num_type::Variable>> = None;
 static mut GLO_CONS_MAP: Option<HashMap<&str, num_type::Constant>> = None;
 static mut COUNT: Option<HashMap<&str, usize>> = None;
+static mut GLO_FUNC_MAP: Option<HashMap<&str, _>> = None;
 
 pub fn init() {
     static_modifier::count::init();
