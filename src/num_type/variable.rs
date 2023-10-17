@@ -10,7 +10,7 @@ pub struct Variable<'a> {
 
 impl<'a: 'static> Variable<'a> {
     pub fn new(name:&'a str, num: Num<'a>) -> Result<Num<'a>, &'a str> {
-        if let Err(msg) = name::name_insert(name) {
+        if let Err(msg) = name::insert(name) {
             Err(msg)
         } else {
             let num = match num {
@@ -25,17 +25,22 @@ impl<'a: 'static> Variable<'a> {
         }
     }
 
-    pub fn new_place_holder_undefined() -> Self {
+    pub fn new_without_name_check(name:&'a str, num: Num<'a>) -> Num<'a> {
+        let num = match num {
+            Num::Expr(expr) => Num::Expr(expr),
+            Num::Var(var) => Num::Var(var),
+            Num::Undefined => Num::Undefined,
+            _ => {warn::unacc_type(); Num::Undefined}
+        };
+        glo_var::insert(name, Self { name: Name::Str(name), num: RefCell::new(num) });
+        count::insert(name, 0);
+        glo_var::get(name).unwrap()
+    }
+
+    pub fn new_place_holder() -> Self {
         Self {
             name: Name::PlaceHolder,
             num: RefCell::new(Num::Undefined),
-        }
-    }
-
-    pub fn new_place_holder(num: Num<'a>) -> Self {
-        Self {
-            name: Name::PlaceHolder,
-            num: RefCell::new(num),
         }
     }
 

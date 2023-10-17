@@ -1,22 +1,40 @@
 use super::warn;
 use super::NAME;
+use std::collections::HashSet;
 
-pub fn name_insert(name: &str) -> Result<(), &str> {
-    if  unsafe {
-        NAME.contains(&name.to_string())
-    } {
-        warn::name_used();
-        Err("SN-1")
-    } else {
-        unsafe {
-            NAME.push(name.to_string())
+pub fn init() {
+    unsafe {
+        if let None = NAME {
+            NAME = Some(HashSet::new())
+        } else {
+            warn::repeat_init()
         }
-        Ok(())
+    }
+}
+
+pub fn insert<'a: 'static>(name: &'a str) -> Result<(), &str> {
+    unsafe {
+        if let Some(name_set) = NAME.as_mut() {
+            if name_set.insert(name) {
+                Ok(())
+            } else {
+                warn::name_used();
+                Err("SN-1")
+            }
+            
+        } else {
+            warn::had_not_init();
+            Err("SM-1")
+        }
     }
 }
 
 pub fn delete_name(name: &str) {
     unsafe {
-        NAME.retain(|x| x != name)
+        if let Some(name_set) = NAME.as_mut() {
+            name_set.retain(|x| x != &name)
+        } else {
+            warn::had_not_init()
+        }
     }
 }

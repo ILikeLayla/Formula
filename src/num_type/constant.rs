@@ -8,7 +8,7 @@ pub struct Constant<'a> {
 
 impl<'a: 'static> Constant<'a> {
     pub fn new(name: &'a str, num: Num<'a>) -> Result<Num<'a>, &'a str> {
-        if let Err(msg) = name::name_insert(name) {
+        if let Err(msg) = name::insert(name) {
             Err(msg)
         } else {
             let num = match num {
