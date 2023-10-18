@@ -26,7 +26,6 @@ pub fn init() {
 
 #[cfg(test)]
 mod tests {
-
     use crate::{num_type::{Variable, Constant, Num}, init, val::Val, COUNT, NAME, operation::Func};
 
     #[test]
