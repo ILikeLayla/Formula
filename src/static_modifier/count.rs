@@ -12,7 +12,7 @@ pub fn init() {
     }
 }
 
-pub fn insert(k: &'static str, v: usize) -> Option<usize> {
+pub fn insert(scope: &str, k: &'static str, v: usize) -> Option<usize> {
     unsafe {
         if let Some(map) = COUNT.as_mut() {
             map.insert(k, v)

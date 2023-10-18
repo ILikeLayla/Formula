@@ -1,4 +1,4 @@
-use super::{Num, name, glo_cons, fixed_num, Name, warn, val::Val, count};
+use super::{Num, num_name, glo_cons, fixed_num, Name, warn, val::Val, count};
 
 #[derive(Debug, Clone)]
 pub struct Constant<'a> {
@@ -6,21 +6,27 @@ pub struct Constant<'a> {
     num: Num<'a>
 }
 
-impl<'a: 'static> Constant<'a> {
-    pub fn new(name: &'a str, num: Num<'a>) -> Result<Num<'a>, &'a str> {
-        if let Err(msg) = name::insert(name) {
-            Err(msg)
-        } else {
-            let num = match num {
-                Num::Fixed(fix) => Num::Fixed(fix),
-                Num::Cons(cons) => Num::Cons(cons),
-                Num::Undefined => Num::Undefined,
-                _ => {warn::unacc_type(); return Err("T-1")}
-            };
-            glo_cons::insert(name, Self { name: Name::Str(name), num });
-            count::insert(name, 0);
-            Ok(glo_cons::get(name).unwrap())
-        }
+impl<'a> Constant<'a> {
+    pub fn new(name: &'a str, num: Num<'a>) -> Result<Self, &'a str> {
+        // if let Err(msg) = name::insert(name) {
+        //     Err(msg)
+        // } else {
+        //     let num = match num {
+        //         Num::Fixed(fix) => Num::Fixed(fix),
+        //         Num::Cons(cons) => Num::Cons(cons),
+        //         Num::Undefined => Num::Undefined,
+        //         _ => {warn::unacc_type(); return Err("T-1")}
+        //     };
+        //     Ok(Self { name: Name::Str(name), num })
+        // }
+
+        let num = match num {
+            Num::Fixed(fix) => Num::Fixed(fix),
+            Num::Cons(cons) => Num::Cons(cons),
+            Num::Undefined => Num::Undefined,
+            _ => {warn::unacc_type(); return Err("T-1")}
+        };
+        Ok(Self { name: Name::Str(name), num })
     }
 }
 
@@ -29,7 +35,7 @@ impl Constant<'_> {
         match self.name {
             Name::Str(name) => {
                 if count::get(self.name.to_str()) == Some(&0) {
-                    name::delete_name(name); 
+                    num_name::delete_name(name); 
                     let _ = count::remove(name);
                 }
             },

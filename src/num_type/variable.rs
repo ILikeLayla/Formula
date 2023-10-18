@@ -1,4 +1,4 @@
-use super::{val::Val, Num, Name, name, glo_var, warn, fixed_num, count};
+use super::{val::Val, Num, Name, num_name, glo_var, warn, fixed_num, count};
 use std::cell::{RefCell, Ref};
 
 #[derive(Debug, Clone)]
@@ -10,7 +10,7 @@ pub struct Variable<'a> {
 
 impl<'a: 'static> Variable<'a> {
     pub fn new(name:&'a str, num: Num<'a>) -> Result<Num<'a>, &'a str> {
-        if let Err(msg) = name::insert(name) {
+        if let Err(msg) = num_name::insert(name) {
             Err(msg)
         } else {
             let num = match num {
@@ -55,7 +55,7 @@ impl Variable<'_> {
         match self.name {
             Name::Str(name) => {
                 if count::get(self.name.to_str()) == Some(&0) {
-                    name::delete_name(name); 
+                    num_name::delete_name(name); 
                     let _ = count::remove(name);
                 }
             },

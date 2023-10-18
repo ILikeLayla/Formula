@@ -1,5 +1,5 @@
 use super::num_type::{Variable, Num};
-use super::{count, name, glo_func};
+use super::{count, num_name, glo_func};
 use std::collections::{HashSet,HashMap};
 
 #[derive(Debug, Clone)]
@@ -14,7 +14,7 @@ pub struct Func<'a> {
 
 impl<'a: 'static> Func<'a> {
     pub fn new(name: &'a str, inp_name: Vec<&'a str>, out_name: Vec<&'a str>) -> Result<(Num<'a>, HashMap<&'a str, Num<'a>>, HashMap<&'a str, Num<'a>>), &'a str> {
-        if let Err(msg) = name::insert(name) {
+        if let Err(msg) = num_name::insert(name) {
             Err(msg)
         } else {
             let inp_name: HashSet<&str> = inp_name.into_iter().collect();
