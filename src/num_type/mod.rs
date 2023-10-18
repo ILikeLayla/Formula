@@ -6,7 +6,7 @@ pub use variable::*;
 pub use constant::*;
 pub use num::*;
 
-use super::operation::{Op, Expr, BasicOp};
+use super::operation::{Op, Expr, BasicOp, Func};
 use super::val;
 use super::static_modifier::{name, glo_cons, glo_var, count};
 use super::warn;

@@ -38,3 +38,14 @@ pub fn delete_name(name: &str) {
         }
     }
 }
+
+pub fn contain(k: &str) -> bool {
+    unsafe {
+        if let Some(set) = &NAME {
+            set.contains(k)
+        } else {
+            warn::had_not_init();
+            false
+        }
+    }
+}

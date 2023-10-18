@@ -1,8 +1,9 @@
 use std::collections::HashMap;
+use crate::num_type::Num;
+
 use super::warn;
 use super::Func;
 use super::GLO_FUNC_MAP;
-use super::Num;
 
 pub fn init() {
     unsafe {
@@ -25,11 +26,11 @@ pub fn insert(k: &'static str, v: Func<'static>) -> Option<Func<'static>> {
     }
 }
 
-pub fn get<'a: 'static>(k: &'a str) -> Option<&Func> {
+pub fn get<'a: 'static>(k: &'a str) -> Option<Num> {
     unsafe {
         if let Some(map) = &GLO_FUNC_MAP {
             if let Some(func) = map.get(k) {
-                Some(func)
+                Some(Num::Func(func))
             } else {
                 warn::name_not_used();
                 None

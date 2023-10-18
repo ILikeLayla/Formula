@@ -6,16 +6,15 @@ pub mod val;
 pub mod config;
 pub mod static_modifier;
 pub mod warn;
+pub mod scope;
 use std::collections::{HashSet, HashMap};
-
-use num_type::Num;
 
 static mut NAME:Option<HashSet<&str>> = None;
 static mut GLO_VAR_MAP: Option<HashMap<&str, num_type::Variable>> = None;
 static mut GLO_CONS_MAP: Option<HashMap<&str, num_type::Constant>> = None;
 static mut GLO_FUNC_MAP: Option<HashMap<&str, operation::Func>> = None;
 static mut COUNT: Option<HashMap<&str, usize>> = None;
-static mut PLACE_HOLDER: Vec<Num> = Vec::new();
+// static mut PLACE_HOLDER: Vec<Num> = Vec::new();
 
 pub fn init() {
     static_modifier::count::init();
@@ -27,22 +26,15 @@ pub fn init() {
 
 #[cfg(test)]
 mod tests {
-    use crate::{num_type::{Variable, Constant, Num}, init, val::Val, COUNT, NAME};
+
+    use crate::{num_type::{Variable, Constant, Num}, init, val::Val, COUNT, NAME, operation::Func};
 
     #[test]
     fn test() {
         init();
 
-        let mut input = Variable::new("input", Num::Undefined).unwrap();
-        let output = Variable::new("output", 2.val() * input.clone() + 3.val()).unwrap();
-
-        println!("{}", input);
-        input.change_val(4.val());
-        println!("{}", input);
-
-        println!();
-
-        println!("{}", output);
-        println!("{}", output.cal());
+        let (func, inp_map, out_map) = Func::new("f", vec!
+            ["x_1", "x_2", "x_3"], vec!["y_1", "y_2", "y_3"]
+        ).unwrap();
     }
 }

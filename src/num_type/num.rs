@@ -1,9 +1,8 @@
-use crate::{warn, val::Val};
+use crate::static_modifier::{glo_cons, glo_var, glo_func, name};
 
-use super::{Variable, Constant, Expr, Op, BasicOp, count, RUDE_DIV};
+use super::{Variable, Constant, Expr, Op, BasicOp, count, RUDE_DIV, Func, warn};
 
 pub mod fixed_num {
-    use super::RUDE_DIV;
 
     #[derive(Debug, Copy, Clone)]
     pub enum FixedNum {
@@ -686,6 +685,7 @@ pub enum Num<'a> {
     Cons(&'a Constant<'a>),
     Expr(Box<Expr<'a>>),
     Fixed(fixed_num::FixedNum),
+    Func(&'a Func<'a>),
     Undefined
 }
 
@@ -710,6 +710,7 @@ impl Num<'_> {
             Num::Var(var) => format!("{}", var.name()),
             Num::Fixed(fix) => format!("{}", fix),
             Num::Expr(expr) => format!("{}", *expr),
+            Num::Func(func) => format!("{}()", func.symbol()),
             Num::Undefined => "UNDEFINED".to_string(),
         }
     }
@@ -727,6 +728,7 @@ impl Num<'_> {
             Num::Cons(cons) => cons.cal(),
             Num::Fixed(fix) => fix.clone(),
             Num::Var(var) => var.cal(),
+            Num::Func(_) => fixed_num::FixedNum::Undefined,
             Num::Undefined => fixed_num::FixedNum::Undefined,
             Num::Expr(expr) => expr.cal()
         }
@@ -760,8 +762,17 @@ impl Num<'_> {
             Num::Var(var) => var.val_print(),
             Num::Expr(expr) => format!("({})", expr),
             Num::Fixed(fix) => format!("{}", fix),
+            Num::Func(func) => format!("{}()", func.symbol()),
             Num::Undefined => "UNDEFINED".to_string()
         }
+    }
+
+    pub fn add_count(&self) {
+        match self {
+            Num::Cons(cons) => count::add_one(cons.name().to_str()),
+            Num::Var(var) => count::add_one(var.name().to_str()),
+            _ => (),
+        };
     }
 }
 
@@ -781,6 +792,7 @@ impl std::fmt::Display for Num<'_> {
             Num::Var(var) => write!(f, "{}", var),
             Num::Expr(expr) => write!(f, "{}", expr),
             Num::Fixed(fix) => write!(f, "{}", fix),
+            Num::Func(func) => write!(f, "{}", func),
             Num::Undefined => write!(f, "UNDEFINED"),
         }
     }
@@ -789,16 +801,8 @@ impl std::fmt::Display for Num<'_> {
 impl std::ops::Add for Num<'_> {
     type Output = Self;
     fn add(self, rhs: Self) -> Self::Output {
-        match &self {
-            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
-            &Num::Var(var) => count::add_one(var.name().to_str()),
-            _ => (),
-        }
-        match &rhs {
-            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
-            &Num::Var(var) => count::add_one(var.name().to_str()),
-            _ => (),
-        }
+        &self.add_count();
+        &rhs.add_count();
         Expr::new(self, rhs, Op::Basic(BasicOp::Add))
     }
 }
@@ -806,16 +810,8 @@ impl std::ops::Add for Num<'_> {
 impl std::ops::Sub for Num<'_> {
     type Output = Self;
     fn sub(self, rhs: Self) -> Self::Output {
-        match &self {
-            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
-            &Num::Var(var) => count::add_one(var.name().to_str()),
-            _ => (),
-        }
-        match &rhs {
-            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
-            &Num::Var(var) => count::add_one(var.name().to_str()),
-            _ => (),
-        }
+        &self.add_count();
+        &rhs.add_count();
         Expr::new(self, rhs, Op::Basic(BasicOp::Sub))
     }
 }
@@ -823,16 +819,8 @@ impl std::ops::Sub for Num<'_> {
 impl std::ops::Mul for Num<'_> {
     type Output = Self;
     fn mul(self, rhs: Self) -> Self::Output {
-        match &self {
-            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
-            &Num::Var(var) => count::add_one(var.name().to_str()),
-            _ => (),
-        }
-        match &rhs {
-            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
-            &Num::Var(var) => count::add_one(var.name().to_str()),
-            _ => (),
-        }
+        &self.add_count();
+        &rhs.add_count();
         Expr::new(self, rhs, Op::Basic(BasicOp::Mul))
     }
 }
@@ -840,16 +828,30 @@ impl std::ops::Mul for Num<'_> {
 impl std::ops::Div for Num<'_> {
     type Output = Self;
     fn div(self, rhs: Self) -> Self::Output {
-        match &self {
-            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
-            &Num::Var(var) => count::add_one(var.name().to_str()),
-            _ => (),
-        }
-        match &rhs {
-            &Num::Cons(cons) => count::add_one(cons.name().to_str()),
-            &Num::Var(var) => count::add_one(var.name().to_str()),
-            _ => (),
-        }
+        &self.add_count();
+        &rhs.add_count();
         Expr::new(self, rhs, Op::Basic(BasicOp::Div))
+    }
+}
+
+pub trait QuickNum<'a> {
+    fn to_num(self) -> Num<'a>;
+}
+
+impl<'a: 'static> QuickNum<'a> for &'a str {
+    fn to_num(self) -> Num<'a> {
+        if name::contain(&self) {
+            if let Some(cons) = glo_cons::get(self) {
+                cons.clone()
+            } else if let Some(var) = glo_var::get(self) {
+                var.clone()
+            } else if let Some(func) = glo_func::get(self) {
+                func.clone()
+            } else {
+                Num::Undefined
+            }
+        } else {
+            Num::Undefined
+        }
     }
 }

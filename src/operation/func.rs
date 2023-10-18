@@ -2,6 +2,7 @@ use super::num_type::{Variable, Num};
 use super::{count, name, glo_func};
 use std::collections::{HashSet,HashMap};
 
+#[derive(Debug, Clone)]
 pub struct Func<'a> {
     name: &'a str,
     inp_name: HashSet<&'a str>,
@@ -12,7 +13,7 @@ pub struct Func<'a> {
 }
 
 impl<'a: 'static> Func<'a> {
-    pub fn new(name: &'a str, inp_name: Vec<&'a str>, out_name: Vec<&'a str>) -> Result<(&'a Self, HashMap<&'a str, Num<'a>>, HashMap<&'a str, Num<'a>>), &'a str> {
+    pub fn new(name: &'a str, inp_name: Vec<&'a str>, out_name: Vec<&'a str>) -> Result<(Num<'a>, HashMap<&'a str, Num<'a>>, HashMap<&'a str, Num<'a>>), &'a str> {
         if let Err(msg) = name::insert(name) {
             Err(msg)
         } else {
@@ -39,5 +40,17 @@ impl<'a: 'static> Func<'a> {
             let out = glo_func::get(name).unwrap();
             Ok( (out, input, output))
         }
+    }
+}
+
+impl Func<'_> {
+    pub fn symbol(&self) -> &str {
+        self.name.clone()
+    }
+}
+
+impl std::fmt::Display for Func<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}()", self.symbol())
     }
 }
