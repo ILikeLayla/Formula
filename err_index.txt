@@ -8,3 +8,6 @@ SC-1    delete before the borrowings are dropped.
 type - T
 T-1     the type is unacceptable.
 T-2     the type is unchangable.
+
+scope - SC
+SC-1    the scope isn't announced.
