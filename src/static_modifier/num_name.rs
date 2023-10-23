@@ -1,21 +1,24 @@
-use super::warn;
-use super::NUM_NAME;
-use std::collections::HashSet;
+use super::{NUM_NAME, STATIC_SCOPE, MAX_SCOPE, warn};
+use std::collections::{HashSet, HashMap};
 
 pub fn init() {
     unsafe {
         if let None = NUM_NAME {
-            NUM_NAME = Some(HashSet::new())
+            let mut map = if MAX_SCOPE != 0 {HashMap::with_capacity(MAX_SCOPE)} else {HashMap::new()};
+            if STATIC_SCOPE {
+                map.insert("static", HashSet::new());
+            }
+            NUM_NAME = Some(map);
         } else {
             warn::repeat_init()
         }
     }
 }
 
-pub fn insert<'a: 'static>(name: &'a str) -> Result<(), &str> {
+pub fn add_scope(name: &str) -> Result<(), &str> {
     unsafe {
         if let Some(name_set) = NUM_NAME.as_mut() {
-            if name_set.insert(name) {
+            if let Some(_) = name_set.insert(name, HashSet::new()) {
                 Ok(())
             } else {
                 warn::name_used();
@@ -29,8 +32,15 @@ pub fn insert<'a: 'static>(name: &'a str) -> Result<(), &str> {
     }
 }
 
-pub fn delete_name(name: &str) {
+pub fn delete_name(scope: &str, name: &str) {
     unsafe {
+        if let Some(map) = NUM_NAME.as_mut() {
+            if let Some(set) = map.get_mut(name) {
+                set.retain(|x| x != &name)
+            } else {
+                warn::
+            }
+        }
         if let Some(name_set) = NUM_NAME.as_mut() {
             name_set.retain(|x| x != &name)
         } else {

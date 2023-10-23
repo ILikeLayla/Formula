@@ -87,7 +87,7 @@ pub fn remove(k: &str) -> Result<(), &str> {
                 }
             } else {
                 warn::delete_before_no_borrow();
-                Err("SC-1")
+                Err("D-1")
             }
         },
         None => Err("SM-1/ SN-2")

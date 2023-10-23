@@ -1,11 +1,15 @@
 use std::collections::HashSet;
 
-use super::{SCOPE_NAME, warn};
+use super::{SCOPE_NAME, warn, STATIC_SCOPE, MAX_SCOPE};
 
 pub fn init() {
     unsafe {
         if let None = SCOPE_NAME {
-            SCOPE_NAME = Some(HashSet::new())
+            let mut set = if MAX_SCOPE != 0 {HashSet::with_capacity(MAX_SCOPE)} else {HashSet::new()};
+            if STATIC_SCOPE {
+                set.insert("static");
+            };
+            SCOPE_NAME = Some(set);
         } else {
             warn::repeat_init()
         }
