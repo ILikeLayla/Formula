@@ -1,4 +1,4 @@
-use super::{val::Val, Num, Name, num_name, glo_var, warn, fixed_num, count};
+use super::{val::Val, Num, Name, num_name, var, warn, fixed_num, count};
 use std::cell::{RefCell, Ref};
 
 #[derive(Debug, Clone)]
@@ -19,9 +19,9 @@ impl<'a: 'static> Variable<'a> {
                 Num::Undefined => Num::Undefined,
                 _ => {warn::unacc_type(); return Err("T-1")}
             };
-            glo_var::insert(name, Self { name: Name::Str(name), num: RefCell::new(num) });
+            var::insert(name, Self { name: Name::Str(name), num: RefCell::new(num) });
             count::insert(name, 0);
-            Ok(glo_var::get(name).unwrap())
+            Ok(var::get(name).unwrap())
         }
     }
 
@@ -32,9 +32,9 @@ impl<'a: 'static> Variable<'a> {
             Num::Undefined => Num::Undefined,
             _ => {warn::unacc_type(); Num::Undefined}
         };
-        glo_var::insert(name, Self { name: Name::Str(name), num: RefCell::new(num) });
+        var::insert(name, Self { name: Name::Str(name), num: RefCell::new(num) });
         count::insert(name, 0);
-        glo_var::get(name).unwrap()
+        var::get(name).unwrap()
     }
 
     pub fn new_place_holder() -> Self {

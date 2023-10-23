@@ -1,4 +1,4 @@
-use super::{Num, num_name, glo_cons, fixed_num, Name, warn, val::Val, count};
+use super::{Num, num_name, cons, fixed_num, Name, warn, val::Val, count};
 
 #[derive(Debug, Clone)]
 pub struct Constant<'a> {

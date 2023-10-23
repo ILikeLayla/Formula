@@ -1,4 +1,4 @@
-use crate::static_modifier::{glo_cons, glo_var, glo_func, num_name};
+use crate::static_modifier::{cons, var, func, num_name};
 
 use super::{Variable, Constant, Expr, Op, BasicOp, count, RUDE_DIV, Func, warn};
 
@@ -841,11 +841,11 @@ pub trait QuickNum<'a> {
 impl<'a: 'static> QuickNum<'a> for &'a str {
     fn to_num(self) -> Num<'a> {
         if num_name::contain(&self) {
-            if let Some(cons) = glo_cons::get(self) {
+            if let Some(cons) = cons::get(self) {
                 cons.clone()
-            } else if let Some(var) = glo_var::get(self) {
+            } else if let Some(var) = var::get(self) {
                 var.clone()
-            } else if let Some(func) = glo_func::get(self) {
+            } else if let Some(func) = func::get(self) {
                 func.clone()
             } else {
                 Num::Undefined

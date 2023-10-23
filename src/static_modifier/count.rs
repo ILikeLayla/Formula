@@ -12,6 +12,16 @@ pub fn init() {
     }
 }
 
+pub fn insert_scope(scope: &str) {
+    unsafe {
+        if let Some(map) = COUNT.as_mut() {
+            map.insert(scope, HashMap::new());
+        } else {
+            warn::had_not_init()
+        }
+    }
+}
+
 pub fn insert(scope: &str, k: &'static str, v: usize) -> Option<usize> {
     unsafe {
         if let Some(map) = COUNT.as_mut() {
@@ -74,23 +84,22 @@ pub fn sub_one(k: &str) {
     add(k, 1, false)
 }
 
-pub fn remove(k: &str) -> Result<(), &str> {
+pub fn remove(k: &str) {
     match get(k) {
         Some(num) => {
             if num == &0 {
                 unsafe {
                     if let Some(map) = COUNT.as_mut() {
-                        map.remove(k); Ok(())
+                        map.remove(k);
                     } else {
-                        Err("SM-1")
+                        ()
                     }
                 }
             } else {
                 warn::delete_before_no_borrow();
-                Err("D-1")
             }
         },
-        None => Err("SM-1/ SN-2")
+        None => ()
     }
 }
 

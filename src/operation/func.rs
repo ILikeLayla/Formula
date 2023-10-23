@@ -1,5 +1,5 @@
 use super::num_type::{Variable, Num};
-use super::{count, num_name, glo_func};
+use super::{count, num_name, func};
 use std::collections::{HashSet,HashMap};
 
 #[derive(Debug, Clone)]
@@ -31,13 +31,13 @@ impl<'a: 'static> Func<'a> {
             };
             let expr = Vec::with_capacity(out_name.len());
 
-            glo_func::insert(name, Self {
+            func::insert(name, Self {
                 name, inp_name, out_name, expr,
                 input: input.clone(), output: output.clone()
             });
             count::insert(name, 0);
 
-            let out = glo_func::get(name).unwrap();
+            let out = func::get(name).unwrap();
             Ok( (out, input, output))
         }
     }
