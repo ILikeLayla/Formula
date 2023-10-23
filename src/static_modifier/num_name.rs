@@ -38,21 +38,21 @@ pub fn delete_name(scope: &str, name: &str) {
             if let Some(set) = map.get_mut(name) {
                 set.retain(|x| x != &name)
             } else {
-                warn::
+                warn::had_not_init()
             }
-        }
-        if let Some(name_set) = NUM_NAME.as_mut() {
-            name_set.retain(|x| x != &name)
-        } else {
-            warn::had_not_init()
         }
     }
 }
 
-pub fn contain(k: &str) -> bool {
+pub fn contain(scope: &str, k: &str) -> bool {
     unsafe {
-        if let Some(set) = &NUM_NAME {
-            set.contains(k)
+        if let Some(name_map) = NUM_NAME {
+            if let Some(map) = name_map.get(scope) {
+                return map.contains(k)
+            } else {
+                warn::scope_unanounced();
+                false
+            }
         } else {
             warn::had_not_init();
             false
